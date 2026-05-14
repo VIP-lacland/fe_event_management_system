@@ -1,7 +1,7 @@
 // src/routes/GuestRoutes.jsx
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from '../pages/guest/LoginPage';
-import HomePage from '../pages/HomePage';
+import HomePage from '../pages/attende/HomePage';
 // import RegisterPage from '../pages/guest/RegisterPage'; // Nếu có
 
 export function GuestRoutes() {
