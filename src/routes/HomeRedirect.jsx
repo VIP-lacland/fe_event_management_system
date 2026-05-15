@@ -2,9 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
-import { AuthLoding } from '../components/loading/AuthLoading';
-// Optional: chỉ dùng khi cần fetch fresh data (edge case)
-// import { getUser } from '../services/UserService';
+import { AuthLoding } from '../components/ui/Loading/AuthLoading';
 
 export function HomeRedirect() {
   const navigate = useNavigate();
@@ -49,6 +47,6 @@ export function HomeRedirect() {
     handleRedirect();
   }, [navigate, user, isAuthenticated, checkAuth]);
 
-  // ✅ Hiển thị loading trong lúc check auth (trải nghiệm tốt hơn)
+  // Hiển thị loading trong lúc check auth (trải nghiệm tốt hơn)
   AuthLoding();
 }
