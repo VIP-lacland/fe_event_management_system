@@ -1,13 +1,16 @@
-import OrganizerHeader from "../Header/OrganizerHeader";
+// src/components/layouts/MainLayouts/OrganizerLayout.jsx
+import { Outlet } from "react-router-dom";
+// import OrganizerHeader from "../../organizer/Header/OrganizerHeader";
+import OrganizerHeader from "../../layouts/Header/OrganizerHeader";
 
 
-export default function OrganizerLayout({children}) {
-    return (
-        <>
-        <div className="organizer-layout">
-            <OrganizerHeader/>
-            {children}
-        </div>
-        </>
-    )
+export default function OrganizerLayout() {
+  return (
+    <div className="organizer-app">
+      <OrganizerHeader />
+      <main className="organizer-main">
+        <Outlet />
+      </main>
+    </div>
+  );
 }

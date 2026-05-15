@@ -1,31 +1,42 @@
+// src/routes/OrganizerRoutes.jsx
+import { Routes, Route, Navigate } from "react-router-dom";
 import OrganizerLayout from "../components/layouts/MainLayouts/OrganizerLayout";
-import HomePage from "../pages/organizer/Home/Home";
 import PrivateRoute from "./PrivateRoute";
-import { Route } from "react-router-dom";
 
+// Pages
+import HomePage from "../pages/organizer/Home/Home";
+// import OrganizerDashboard from "../pages/organizer/Dashboard/OrganizerDashboard";
+// import OrganizerCreateEvent from "../pages/organizer/Events/OrganizerCreateEvent";
 
+// ✅ Route config: path RELATIVE (bỏ /organizer/ prefix)
 const organizerRoutes = [
-   { path: '/organizer/home', element: <HomePage /> },
-//    { path: '/organizer/dashboard', element: <OrganizerDashboard />},
-//    { path: '/organizer/events/create', element: <OrganizerCreateEvent />},
-]
+  { path: 'home', element: <HomePage /> },
+//   { path: 'dashboard', element: <OrganizerDashboard /> },
+//   { path: 'events/create', element: <OrganizerCreateEvent /> },
+];
 
 export function OrganizerRoutes() {
-    return (organizerRoutes.map((path, element) => (
-        <Route 
-        key={path} 
-        path={path} 
+  return (
+    /* ✅ BẮT BUỘC: Bọc trong <Routes> */
+    <Routes>
+      {/* Redirect /organizer → /organizer/home */}
+      <Route path="/" element={<Navigate to="home" replace />} />
+      <Route 
         element={
-            <PrivateRoute >
-                <OrganizerLayout>
-                    {element}
-                </OrganizerLayout>
-            </PrivateRoute>
-        } />)
-    
-    )
-
-    )
-
+          <PrivateRoute role="organizer">
+            <OrganizerLayout />
+          </PrivateRoute>
+        }
+      >
+        {organizerRoutes.map(({ path, element }) => (
+          <Route 
+            key={path} 
+            path={path} 
+            element={element} 
+          />
+        ))}
+      </Route>
+      <Route path="*" element={<Navigate to="home" replace />} />
+    </Routes>
+  );
 }
-

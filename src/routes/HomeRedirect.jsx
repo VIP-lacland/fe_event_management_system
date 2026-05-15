@@ -48,5 +48,5 @@ export function HomeRedirect() {
   }, [navigate, user, isAuthenticated, checkAuth]);
 
   // Hiển thị loading trong lúc check auth (trải nghiệm tốt hơn)
-  AuthLoding();
+  return <AuthLoding/>;
 }

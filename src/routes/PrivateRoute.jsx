@@ -1,6 +1,6 @@
 // src/components/auth/ProtectedRoute.jsx
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../store/authStore';
 
 const ProtectedRoute = ({ children, role }) => {
   const { user, isAuthenticated, checkAuth } = useAuthStore();

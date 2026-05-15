@@ -33,7 +33,7 @@ const LoginPage = () => {
     setErrors({});
 
     try {
-      const { responseData } = await Login.post(formData.email, formData.password);
+      const responseData  = await Login(formData.email, formData.password);
       login(responseData.user, responseData.token);
       localStorage.setItem('user', JSON.stringify(responseData.user));
 
