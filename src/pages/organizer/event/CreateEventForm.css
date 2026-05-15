@@ -1,0 +1,186 @@
+/* ========================================
+   CreateEventForm.css - Clean & Optimized
+   ======================================== */
+* { box-sizing: border-box; }
+
+/* Wrapper & Container */
+.event-form-wrapper {
+  min-height: 100vh;
+  background: #f8fafc; /* Nền sạch, loại bỏ gradient */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.event-form-container {
+  width: 100%;
+  max-width: 44rem;
+}
+
+/* Card */
+.event-form-card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  padding: 2rem; /* Padding bao quanh toàn bộ nội dung */
+}
+
+/* Ẩn thanh màu loang (nếu bạn chưa xóa div trong JSX) */
+.event-form-accent-bar { display: none; }
+
+/* Form Body */
+.event-form-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Header (đã đưa vào trong card) */
+.event-form-header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.event-form-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  background: #f1f5f9;
+  color: #4f46e5;
+  margin-bottom: 0.75rem;
+}
+
+.event-form-icon-box svg { width: 1.5rem; height: 1.5rem; }
+
+.event-form-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.25rem;
+}
+
+.event-form-subtitle {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Messages */
+.event-form-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+.event-form-message svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
+.event-form-message-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+.event-form-message-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+/* Fields & Labels */
+.event-form-field { display: flex; flex-direction: column; }
+.event-form-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.35rem;
+}
+.event-form-label-required::after { content: " *"; color: #ef4444; }
+
+/* Inputs */
+.event-form-input, .event-form-select, .event-form-textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.9rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.event-form-input::placeholder, .event-form-textarea::placeholder { color: #94a3b8; }
+.event-form-input:focus, .event-form-select:focus, .event-form-textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+.event-form-input-error, .event-form-select-error { border-color: #ef4444; }
+.event-form-textarea { resize: vertical; min-height: 80px; }
+
+/* Input with Icon */
+.event-form-input-wrapper { position: relative; }
+.event-form-input-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+  display: flex;
+}
+.event-form-input-icon svg { width: 1rem; height: 1rem; }
+.event-form-input-with-icon { padding-left: 2.25rem; }
+
+/* Grid Layout */
+.event-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+@media (min-width: 640px) { .event-form-grid { grid-template-columns: 1fr 1fr; } }
+
+/* Divider */
+.event-form-divider { height: 1px; background: #e2e8f0; margin: 0.25rem 0; }
+
+/* ========================================
+   Actions & Buttons - Equal Size
+   ======================================== */
+.event-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.event-form-btn {
+  width: 100px;
+  height: 38px;
+  padding: 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+.event-form-btn svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+
+.event-form-btn-secondary { background: #f8fafc; border-color: #cbd5e1; color: #475569; }
+.event-form-btn-secondary:hover:not(:disabled) { background: #f1f5f9; border-color: #94a3b8; }
+
+.event-form-btn-primary { background: #4f46e5; color: white; font-weight: 600; }
+.event-form-btn-primary:hover:not(:disabled) { background: #4338ca; }
+
+.event-form-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.event-form-btn svg.animate-spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Footer & Errors */
+.event-form-footer { text-align: center; font-size: 0.75rem; color: #64748b; margin-top: 1rem; }
+.event-form-footer .required-mark { color: #ef4444; }
+.event-form-error-text { margin-top: 0.25rem; font-size: 0.75rem; color: #ef4444; }

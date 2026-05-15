@@ -1,12 +1,18 @@
-// service/EventService.js
 import api from "./api";
 
+/**
+ * Lấy danh sách sự kiện với bộ lọc
+ * @param {Object} params - { page, limit, category, status, search }
+ */
 export const GetEvents = async (params = {}) => {
   const response = await api.get('/events', { params });
   return response.data; 
 };
 
-
+/**
+ * Lấy chi tiết sự kiện theo ID
+ * @param {number|string} id - ID của sự kiện
+ */
 export const GetEventById = async (id) => {
   const response = await api.get(`/events/${id}`);
   return response.data; // { event, message }
@@ -23,7 +29,7 @@ export const CreateEvent = async (eventData) => {
 
 /**
  * Cập nhật sự kiện theo ID
- * @param {number} id - ID của sự kiện
+ * @param {number|string} id - ID của sự kiện
  * @param {Object} eventData - Các trường cần cập nhật
  */
 export const UpdateEvent = async (id, eventData) => {
@@ -31,7 +37,10 @@ export const UpdateEvent = async (id, eventData) => {
   return response.data; // { event, message }
 };
 
-
+/**
+ * Xóa sự kiện theo ID
+ * @param {number|string} id - ID của sự kiện cần xóa
+ */
 export const DeleteEvent = async (id) => {
   const response = await api.delete(`/events/${id}`);
   return response.data; // { message }
@@ -39,8 +48,8 @@ export const DeleteEvent = async (id) => {
 
 /**
  * Thay đổi trạng thái sự kiện (draft / published / cancelled)
- * @param {number} id
- * @param {'draft'|'published'|'cancelled'} status
+ * @param {number|string} id - ID của sự kiện
+ * @param {'draft'|'published'|'cancelled'} status - Trạng thái mới
  */
 export const UpdateEventStatus = async (id, status) => {
   const response = await api.patch(`/events/${id}/status`, { status });
