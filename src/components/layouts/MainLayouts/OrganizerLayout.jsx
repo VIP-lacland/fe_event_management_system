@@ -9,6 +9,7 @@ export default function OrganizerLayout() {
     <div className="organizer-app">
       <OrganizerHeader />
       <main className="organizer-main">
+        {console.log('🔌 Outlet rendering')}
         <Outlet />
       </main>
     </div>

@@ -1,55 +1,59 @@
 // src/pages/LoginPage.jsx
-import { useState } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { useAuthStore } from '../../store/authStore';
-import { Login } from '../../services/AuthService';
+import { useState } from "react";
+import { useNavigate, Link} from "react-router-dom";
+import { useAuthStore } from "../../store/authStore";
+import { Login } from "../../services/AuthService";
 import "./Login.css";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   const login = useAuthStore((state) => state.login);
 
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState('');
+  const [serverError, setServerError] = useState("");
 
-  const from = location.state?.from?.pathname || '/dashboard';
+  // const from = location.state?.from?.pathname || "/dashboard";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
-    if (serverError) setServerError('');
+    if (serverError) setServerError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setServerError('');
+    setServerError("");
     setErrors({});
 
     try {
-      const responseData  = await Login(formData.email, formData.password);
+      const responseData = await Login(formData.email, formData.password);
       login(responseData.user, responseData.token);
-      localStorage.setItem('user', JSON.stringify(responseData.user));
+      localStorage.setItem("user", JSON.stringify(responseData.user));
 
-      const redirectPath = responseData.user.role === 'attendee'
-        ? '/'
-        : '/organizer/dashboard';
+      const redirectPath =
+        responseData.user.role === "attendee"
+          ? "/attendee"
+          : "/organizer/home";
 
-      navigate(from || redirectPath, { replace: true });
+      setTimeout(() => {
+        navigate(redirectPath, { replace: true });
+      }, 100);
 
+      
     } catch (err) {
       if (err.response?.status === 422) {
         setErrors(err.response.data.errors || {});
       } else if (err.response?.status === 401) {
-        setServerError('Email hoặc mật khẩu không chính xác');
+        setServerError("Email hoặc mật khẩu không chính xác");
       } else {
-        setServerError('Đã xảy ra lỗi. Vui lòng thử lại.');
+        setServerError("Đã xảy ra lỗi. Vui lòng thử lại.");
       }
     } finally {
       setLoading(false);
@@ -66,9 +70,7 @@ const LoginPage = () => {
         <form className="login-form" onSubmit={handleSubmit}>
           {/* Server Error */}
           {serverError && (
-            <div className="alert alert--error">
-              {serverError}
-            </div>
+            <div className="alert alert--error">{serverError}</div>
           )}
 
           {/* Email */}
@@ -84,7 +86,7 @@ const LoginPage = () => {
               required
               value={formData.email}
               onChange={handleChange}
-              className={`form-input ${errors.email ? 'form-input--error' : ''}`}
+              className={`form-input ${errors.email ? "form-input--error" : ""}`}
               placeholder="your@email.com"
             />
             {errors.email && (
@@ -105,7 +107,7 @@ const LoginPage = () => {
               required
               value={formData.password}
               onChange={handleChange}
-              className={`form-input ${errors.password ? 'form-input--error' : ''}`}
+              className={`form-input ${errors.password ? "form-input--error" : ""}`}
               placeholder="••••••••"
             />
             {errors.password && (
@@ -117,13 +119,13 @@ const LoginPage = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`login-submit-btn ${loading ? 'login-submit-btn--loading' : ''}`}
+            className={`login-submit-btn ${loading ? "login-submit-btn--loading" : ""}`}
           >
-            {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+            {loading ? "Đang đăng nhập..." : "Đăng nhập"}
           </button>
 
           <p className="login-register-prompt">
-            Hoặc{' '}
+            Hoặc{" "}
             <Link to="/register" className="login-register-link">
               tạo tài khoản mới
             </Link>

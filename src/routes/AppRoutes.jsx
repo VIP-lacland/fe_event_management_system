@@ -1,23 +1,40 @@
 // src/routes/AppRoutes.jsx
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { GuestRoutes } from "./GuestRoutes";
-import { OrganizerRoutes } from "./OrganizerRoutes";
-import { HomeRedirect } from "./HomeRedirect";
-// import { AttendeeRoutes } from "./AttendeeRoutes"; // Nếu có
+import { createBrowserRouter } from "react-router-dom";
+import OrganizerLayout from "../components/layouts/MainLayouts/OrganizerLayout";
+import { getOrganizerRoutes } from "./OrganizerRoutes";
+import LoginPage from "../pages/guest/LoginPage";
+import ProtectedRoute from "./ProtectedRoute";
 
-export function AppRoutes() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login/*" element={<GuestRoutes />} />
-        <Route path="/register/*" element={<GuestRoutes />} />
-        <Route path="/" element={<HomeRedirect />} />
-        <Route path="/organizer/*" element={<OrganizerRoutes />} />
+const publicRoutes = [
+  {
+    path: "/",
+    element: <LoginPage />,
+    handle: { public: true },
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+    handle: { public: true },
+  },
+  {
+    path: "/register",
+    element: <LoginPage />, // Tạm dùng LoginPage
+    handle: { public: true },
+  },
+];
 
-        {/* ✅ Attendee routes - protected (nếu có) */}
-        {/* <Route path="/attendee/*" element={<AttendeeRoutes />} /> */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    </BrowserRouter>
-  );
-}
+const router = createBrowserRouter([
+  ...publicRoutes,
+  {
+    path: "/organizer",
+    element: (
+      <ProtectedRoute allowedRoles={["organizer"]}>
+        <OrganizerLayout />
+      </ProtectedRoute>
+    ),
+    handle: { requiresAuth: true, allowedRoles: ["organizer"] },
+    children: getOrganizerRoutes(), // Import từ module
+  },
+]);
+
+export default router;

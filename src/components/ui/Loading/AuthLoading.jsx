@@ -1,4 +1,4 @@
-export function AuthLoding() {
+export function AuthLoading() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="text-center">
