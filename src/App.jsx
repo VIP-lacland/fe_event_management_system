@@ -1,8 +1,8 @@
 // src/App.jsx
 import { useEffect } from 'react';
 import { useAuthStore } from './store/authStore';
-
-import { AppRoutes } from './routes/AppRoutes';
+import AppRoutes  from './routes/AppRoutes';
+import { RouterProvider } from 'react-router-dom';
 
 
 function App() {
@@ -14,7 +14,9 @@ function App() {
     checkAuth();
   }, [checkAuth]); // Dependency: checkAuth
 
-   return <AppRoutes />;
+   return (
+    <RouterProvider router={AppRoutes} />
+  );
 }
 
 export default App;
