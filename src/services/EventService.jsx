@@ -5,7 +5,7 @@ import api from "./api";
  * @param {Object} params - { page, limit, category, status, search }
  */
 export const GetEvents = async (params = {}) => {
-  const response = await api.get('/events', { params });
+  const response = await api.get('/organizer/events', { params });
   return response.data; 
 };
 
@@ -14,7 +14,7 @@ export const GetEvents = async (params = {}) => {
  * @param {number|string} id - ID của sự kiện
  */
 export const GetEventById = async (id) => {
-  const response = await api.get(`/events/${id}`);
+  const response = await api.get(`/organizer/events/${id}`);
   return response.data; // { event, message }
 };
 
@@ -23,7 +23,7 @@ export const GetEventById = async (id) => {
  * @param {Object} eventData - { title, description, category, location, event_date, capacity, status }
  */
 export const CreateEvent = async (eventData) => {
-  const response = await api.post('/events', eventData);
+  const response = await api.post('/organizer/events', eventData);
   return response.data; // { event, message }
 };
 
@@ -33,7 +33,7 @@ export const CreateEvent = async (eventData) => {
  * @param {Object} eventData - Các trường cần cập nhật
  */
 export const UpdateEvent = async (id, eventData) => {
-  const response = await api.put(`/events/${id}`, eventData);
+  const response = await api.put(`/organizer/events/${id}`, eventData);
   return response.data; // { event, message }
 };
 
@@ -42,7 +42,7 @@ export const UpdateEvent = async (id, eventData) => {
  * @param {number|string} id - ID của sự kiện cần xóa
  */
 export const DeleteEvent = async (id) => {
-  const response = await api.delete(`/events/${id}`);
+  const response = await api.delete(`/organizer/events/${id}`);
   return response.data; // { message }
 };
 
@@ -52,6 +52,6 @@ export const DeleteEvent = async (id) => {
  * @param {'draft'|'published'|'cancelled'} status - Trạng thái mới
  */
 export const UpdateEventStatus = async (id, status) => {
-  const response = await api.patch(`/events/${id}/status`, { status });
+  const response = await api.patch(`/organizer/events/${id}/status`, { status });
   return response.data; // { event, message }
 };
