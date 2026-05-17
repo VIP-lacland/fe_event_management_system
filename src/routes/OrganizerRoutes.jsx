@@ -1,5 +1,5 @@
 import HomePage from "../pages/organizer/Home/Home";
-import { Dashboard } from "../pages/organizer/Dashboard/Dashboard";
+import Dashboard from "../pages/organizer/Dashboard/Dashboard";
 
 export function getOrganizerRoutes() {
   return [
