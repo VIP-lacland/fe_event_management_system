@@ -1,13 +1,13 @@
 // src/pages/EditEventPage.jsx
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEventStore } from '../store/eventStore';
-import '../styles/EditEvent.css';
+import { useEventStore } from '../../../store/eventStore';
+import './EditEvent.css';
 
 const CATEGORIES = ['Music', 'Sports', 'Food & Drink', 'Arts', 'Education', 'Community'];
 const STATUSES = ['draft', 'published', 'cancelled'];
 
-export function EditEventPage() {
+export default function EditEventPage() {
   const { eventId } = useParams();
   const navigate = useNavigate();
   const { fetchEventById, updateEvent, isLoading, error } = useEventStore();

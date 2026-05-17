@@ -3,8 +3,8 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import OrganizerLayout from "../components/layouts/MainLayouts/OrganizerLayout";
 import HomePage from "../pages/attende/HomePage";
 import LoginPage from "../pages/guest/LoginPage";
-import CreateEventForm from "../pages/organizer/event/CreateEventForm";
-import { EditEventPage } from "../pages/EditEventPage";
+// import CreateEventForm from "../pages/organizer/event/CreateEventForm";
+// import { EditEventPage } from "../pages/EditEventPage";
 import { getOrganizerRoutes } from "./OrganizerRoutes";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -42,14 +42,6 @@ const router = createBrowserRouter([
         element: <Navigate to="home" replace />,
       },
       ...getOrganizerRoutes(),
-      {
-        path: "create",
-        element: <CreateEventForm />,
-      },
-      {
-        path: "events/:eventId/edit",
-        element: <EditEventPage />,
-      },
     ],
   },
   {
