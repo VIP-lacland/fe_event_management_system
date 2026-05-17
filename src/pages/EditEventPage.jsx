@@ -10,7 +10,7 @@ const STATUSES = ['draft', 'published', 'cancelled'];
 export function EditEventPage() {
   const { eventId } = useParams();
   const navigate = useNavigate();
-  const { event, fetchEventById, updateEvent, isLoading, error } = useEventStore();
+  const { fetchEventById, updateEvent, isLoading, error } = useEventStore();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -43,7 +43,7 @@ export function EditEventPage() {
         })
         .catch(() => setFormError('Failed to load event'));
     }
-  }, [eventId]);
+  }, [eventId, fetchEventById]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

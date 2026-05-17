@@ -1,56 +1,51 @@
 // src/services/EventService.js
-import api from './api';
+import api from "./api";
 
 export const EventService = {
-  /**
-   * Get all events for organizer
-   */
-  getEvents: async () => {
-    try {
-      const response = await api.get('/organizer/events');
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching events:', error);
-      throw error;
-    }
+  fetchEvents: async (filters = {}) => {
+    const response = await api.get("/events", { params: filters });
+    return { data: response.data?.data ?? [] };
   },
 
-  /**
-   * Get single event by ID
-   */
+  fetchEventById: async (eventId) => {
+    const response = await api.get(`/events/${eventId}`);
+    return { data: response.data?.data ?? null };
+  },
+
+  getEvents: async (params = {}) => {
+    const response = await api.get("/organizer/events", { params });
+    return response.data;
+  },
+
   getEventById: async (id) => {
-    try {
-      const response = await api.get(`/organizer/events/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching event:', error);
-      throw error;
-    }
+    const response = await api.get(`/organizer/events/${id}`);
+    return response.data;
   },
 
-  /**
-   * Update event (all fields)
-   */
+  createEvent: async (eventData) => {
+    const response = await api.post("/organizer/events", eventData);
+    return response.data;
+  },
+
   updateEvent: async (id, eventData) => {
-    try {
-      const response = await api.put(`/organizer/events/${id}`, eventData);
-      return response.data;
-    } catch (error) {
-      console.error('Error updating event:', error);
-      throw error;
-    }
+    const response = await api.put(`/organizer/events/${id}`, eventData);
+    return response.data;
   },
 
-  /**
-   * Update only event status
-   */
+  deleteEvent: async (id) => {
+    const response = await api.delete(`/organizer/events/${id}`);
+    return response.data;
+  },
+
   updateEventStatus: async (id, status) => {
-    try {
-      const response = await api.patch(`/organizer/events/${id}/status`, { status });
-      return response.data;
-    } catch (error) {
-      console.error('Error updating event status:', error);
-      throw error;
-    }
+    const response = await api.patch(`/organizer/events/${id}/status`, { status });
+    return response.data;
   },
 };
+
+export const GetEvents = EventService.getEvents;
+export const GetEventById = EventService.getEventById;
+export const CreateEvent = EventService.createEvent;
+export const UpdateEvent = EventService.updateEvent;
+export const DeleteEvent = EventService.deleteEvent;
+export const UpdateEventStatus = EventService.updateEventStatus;

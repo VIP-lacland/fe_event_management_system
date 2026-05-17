@@ -17,6 +17,29 @@
   }
 }
 
+:root {
+  /* Blue-light dominant + soft orange accent (60-30-10) */
+  --color-dominant: #eaf6ff;    /* 60% - very light blue background */
+  --color-secondary: #2b8cff;   /* 30% - mid blue for sections/menus */
+  --color-secondary-dark: #0f5fbf; /* darker secondary */
+  --color-accent: #ff914d;      /* 10% - soft warm orange for CTA */
+  --color-accent-2: #ffd8a8;    /* pale orange/yellow for small highlights */
+  --text-dark: #04263b;
+  --muted: rgba(4,38,59,0.6);
+  --border: rgba(4,38,59,0.06);
+  --shadow: 0 10px 30px rgba(4,38,59,0.08);
+}
+
+html,body,#root {
+  height:100%;
+}
+body {
+  background: linear-gradient(180deg, var(--color-dominant), #f5fbff);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  color:var(--text-dark);
+}
+
 .hero {
   position: relative;
 

@@ -1,14 +1,17 @@
 // src/routes/AppRoutes.jsx
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import OrganizerLayout from "../components/layouts/MainLayouts/OrganizerLayout";
-import { getOrganizerRoutes } from "./OrganizerRoutes";
+import HomePage from "../pages/attende/HomePage";
 import LoginPage from "../pages/guest/LoginPage";
+import CreateEventForm from "../pages/organizer/event/CreateEventForm";
+import { EditEventPage } from "../pages/EditEventPage";
+import { getOrganizerRoutes } from "./OrganizerRoutes";
 import ProtectedRoute from "./ProtectedRoute";
 
 const publicRoutes = [
   {
     path: "/",
-    element: <LoginPage />,
+    element: <HomePage />,
     handle: { public: true },
   },
   {
@@ -18,7 +21,7 @@ const publicRoutes = [
   },
   {
     path: "/register",
-    element: <LoginPage />, // Tạm dùng LoginPage
+    element: <LoginPage />,
     handle: { public: true },
   },
 ];
@@ -33,7 +36,25 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     handle: { requiresAuth: true, allowedRoles: ["organizer"] },
-    children: getOrganizerRoutes(), // Import từ module
+    children: [
+      {
+        index: true,
+        element: <Navigate to="home" replace />,
+      },
+      ...getOrganizerRoutes(),
+      {
+        path: "create",
+        element: <CreateEventForm />,
+      },
+      {
+        path: "events/:eventId/edit",
+        element: <EditEventPage />,
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <Navigate to="/" replace />,
   },
 ]);
 

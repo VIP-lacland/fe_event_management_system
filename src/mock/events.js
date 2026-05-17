@@ -1,0 +1,58 @@
+const mockEvents = [
+  {
+    id: 1,
+    title: 'Tech Innovators Summit 2026',
+    category: 'Công nghệ',
+    description: 'Hội thảo về AI, cloud và xu hướng công nghệ cho startups.',
+    max_attendees: 300,
+    event_date: '2026-06-12T18:30:00',
+    location: 'Da Nang Innovation Hub',
+  },
+  {
+    id: 2,
+    title: 'City Marathon 2026',
+    category: 'Thể thao',
+    description: 'Giải chạy vì sức khỏe cộng đồng, nhiều cự ly cho mọi lứa tuổi.',
+    max_attendees: 1500,
+    event_date: '2026-07-04T06:00:00',
+    location: 'Công viên Biển đông, Đà Nẵng',
+  },
+  {
+    id: 3,
+    title: 'Volunteer Beach Cleanup',
+    category: 'Tình nguyện',
+    description: 'Chiến dịch dọn sạch bãi biển, góp phần bảo vệ môi trường.',
+    max_attendees: 200,
+    event_date: '2026-05-30T08:00:00',
+    location: 'My Khe Beach',
+  },
+  {
+    id: 4,
+    title: 'Startup Pitch Night',
+    category: 'Hội thảo',
+    description: 'Buổi pitching dành cho startups kết nối nhà đầu tư và mentor.',
+    max_attendees: 120,
+    event_date: '2026-06-20T19:00:00',
+    location: 'CoWorking DN',
+  },
+  {
+    id: 5,
+    title: 'Creative Arts Fair',
+    category: 'Nghệ thuật',
+    description: 'Trưng bày các tác phẩm sáng tạo từ nghệ sĩ địa phương.',
+    max_attendees: 400,
+    event_date: '2026-08-11T10:00:00',
+    location: 'Da Nang Cultural Center',
+  },
+  {
+    id: 6,
+    title: 'Frontend Meetup',
+    category: 'Công nghệ',
+    description: 'Giao lưu, chia sẻ kỹ thuật React, Vite và thiết kế UI/UX.',
+    max_attendees: 80,
+    event_date: '2026-06-05T18:00:00',
+    location: 'TechSpace DN',
+  },
+];
+
+export default mockEvents;
