@@ -13,7 +13,6 @@ const HomeContent = ({
   filteredEvents,
   loading,
   error,
-  categoryImages,
 }) => {
   return (
     <section className="homepage-content" id="events">

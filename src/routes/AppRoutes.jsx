@@ -1,15 +1,61 @@
-import { GuestRoutes } from "./GuestRouter"
-import { HashRouter, Routes, Route, Navigate } from "react-router-dom"
+// src/routes/AppRoutes.jsx
+import { createBrowserRouter, Navigate } from "react-router-dom";
+import OrganizerLayout from "../components/layouts/MainLayouts/OrganizerLayout";
+import HomePage from "../pages/attende/HomePage";
+import LoginPage from "../pages/guest/LoginPage";
+import CreateEventForm from "../pages/organizer/event/CreateEventForm";
+import { EditEventPage } from "../pages/EditEventPage";
+import { getOrganizerRoutes } from "./OrganizerRoutes";
+import ProtectedRoute from "./ProtectedRoute";
 
-export function AppRoutes() {
-    return (
-        <HashRouter>
-                <Routes>
-                    <Route path="/*" element={<GuestRoutes />} />
-                    {/* Private Routes - cho user đã login (thêm sau) */}
-                    {/* <Route path="/*" element={<PrivateRoutes />} /> */}
-                    <Route path="*" element={<Navigate to="/login" replace />} />
-                </Routes>
-        </HashRouter>
-    )
-}
+const publicRoutes = [
+  {
+    path: "/",
+    element: <HomePage />,
+    handle: { public: true },
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+    handle: { public: true },
+  },
+  {
+    path: "/register",
+    element: <LoginPage />,
+    handle: { public: true },
+  },
+];
+
+const router = createBrowserRouter([
+  ...publicRoutes,
+  {
+    path: "/organizer",
+    element: (
+      <ProtectedRoute allowedRoles={["organizer"]}>
+        <OrganizerLayout />
+      </ProtectedRoute>
+    ),
+    handle: { requiresAuth: true, allowedRoles: ["organizer"] },
+    children: [
+      {
+        index: true,
+        element: <Navigate to="home" replace />,
+      },
+      ...getOrganizerRoutes(),
+      {
+        path: "create",
+        element: <CreateEventForm />,
+      },
+      {
+        path: "events/:eventId/edit",
+        element: <EditEventPage />,
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <Navigate to="/" replace />,
+  },
+]);
+
+export default router;
