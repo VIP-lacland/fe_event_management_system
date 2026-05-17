@@ -3,6 +3,7 @@
 const Footer = () => {
   return (
     <footer className="homepage-footer">
+      {/* Footer top indicator or spacing handled by CSS - content below */}
       <div className="footer-grid">
         <div className="footer-col">
           <h3>Eventify</h3>

@@ -37,7 +37,7 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedFilter, setSelectedFilter] = useState('All');
-  const [selectedCity, setSelectedCity] = useState('TP. Đà Nẵng');
+  const [selectedCity, setSelectedCity] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -47,8 +47,8 @@ const HomePage = () => {
       setError('');
 
       try {
-        const eventData = await EventService.fetchEvents();
-        setEvents(eventData);
+        const { data } = await EventService.fetchEvents();
+        setEvents(data || []);
       } catch (err) {
         setError('Không thể tải dữ liệu sự kiện. Vui lòng thử lại sau.');
         console.error(err);
@@ -99,22 +99,24 @@ const HomePage = () => {
       <Header />
 
       <section className="homepage-hero">
-        <div className="hero-copy">
-          <span className="eyebrow">A NIGHT FOR EVERY STAR</span>
-          <h1>Year End Party 2025</h1>
+        <img
+          className="hero-banner-image"
+          src="/images/banner.png"
+          alt="A Night for Every Star - Year End Party 2025"
+        />
+        <div className="hero-shade" />
+        <div className="hero-info">
+          <span className="hero-kicker">Featured Event</span>
+          <h1>A Night for Every Star</h1>
           <p>
-            Cùng Synopsys chào đón đêm tiệc Gala tại Đà Nẵng ngày 23.01.2026, nơi mọi vì sao hội tụ và trải nghiệm tỏa sáng.
+            Đêm Year End Party 2025 tại Đà Nẵng với âm nhạc, ánh sáng và không gian kết nối dành cho cộng đồng.
           </p>
-        </div>
-        <div className="hero-card">
-          <span>Featured Experience</span>
-          <strong>A Night for Every Star</strong>
-          <p>
-            Đêm Year End Party 2025 với âm nhạc, fireworks và không gian networking đẳng cấp dành cho cộng đồng.
-          </p>
-          <div className="event-meta">
-            <span>23.01.2026</span>
-            <span>Đà Nẵng Convention Center</span>
+          <div className="hero-actions">
+            <a href="#events" className="hero-primary-action">Xem sự kiện</a>
+            <div className="hero-meta">
+              <span>23.01.2026</span>
+              <span>Đà Nẵng Convention Center</span>
+            </div>
           </div>
         </div>
       </section>

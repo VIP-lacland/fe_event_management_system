@@ -16,7 +16,7 @@ const HomeContent = ({
   categoryImages,
 }) => {
   return (
-    <section className="homepage-content">
+    <section className="homepage-content" id="events">
       <div className="browse-controls">
         <CityDropdown selectedCity={selectedCity} onCityChange={onCityChange} />
         <div className="filter-line">
@@ -42,34 +42,35 @@ const HomeContent = ({
       )}
 
       <div className="event-grid">
-        {filteredEvents.map((event) => (
-          <article className="event-card" key={event.id}>
-            <div
-              className="event-thumb"
-              style={{ background: categoryImages[event.category] || '#8b5cf6' }}
-            />
-            <div className="event-content">
-              <div className="event-meta">
-                <span>{new Date(event.event_date).toLocaleDateString('en-GB', {
-                  weekday: 'short',
-                  day: '2-digit',
-                  month: 'short',
-                })}</span>
-                <span>{event.location}</span>
+        {filteredEvents.map((event) => {
+          const thumbStyle = { backgroundImage: "url('/images/banner.png')", backgroundSize: 'cover', backgroundPosition: 'center' };
+
+          return (
+            <article className="event-card" key={event.id}>
+              <div className="event-thumb" style={thumbStyle} />
+              <div className="event-content">
+                <div className="event-meta">
+                  <span>{new Date(event.event_date).toLocaleDateString('en-GB', {
+                    weekday: 'short',
+                    day: '2-digit',
+                    month: 'short',
+                  })}</span>
+                  <span>{event.location}</span>
+                </div>
+                <h2 className="event-title">{event.title}</h2>
+                <p className="event-description">
+                  {event.description || 'Sự kiện hấp dẫn đang chờ bạn khám phá.'}
+                </p>
+                <div className="event-footer">
+                  <span className="event-label">{event.category}</span>
+                  <button className="event-action" type="button">
+                    View details
+                  </button>
+                </div>
               </div>
-              <h2 className="event-title">{event.title}</h2>
-              <p className="event-description">
-                {event.description || 'Sự kiện hấp dẫn đang chờ bạn khám phá.'}
-              </p>
-              <div className="event-footer">
-                <span className="event-label">{event.category}</span>
-                <button className="event-action" type="button">
-                  View details
-                </button>
-              </div>
-            </div>
-          </article>
-        ))}
+            </article>
+          );
+        })}
       </div>
     </section>
   );

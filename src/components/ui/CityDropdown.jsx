@@ -70,6 +70,7 @@ const CityDropdown = ({ selectedCity, onCityChange }) => {
     <label className="city-dropdown">
       <span>Browse event in</span>
       <select value={selectedCity} onChange={(event) => onCityChange(event.target.value)}>
+        <option value="">All cities</option>
         {cities.map((city) => (
           <option key={city} value={city}>
             {city}
