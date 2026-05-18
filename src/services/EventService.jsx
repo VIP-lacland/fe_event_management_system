@@ -3,7 +3,10 @@ import api from "./api";
 export const EventService = {
   fetchEvents: async (filters = {}) => {
     const response = await api.get("/events", { params: filters });
-    return { data: response.data?.data ?? [] };
+    // Backend returns paginated: { data: { data: [...], current_page, ... } }
+    const payload = response.data?.data ?? response.data;
+    const items = Array.isArray(payload) ? payload : (payload?.data ?? []);
+    return { data: items };
   },
 
   fetchEventById: async (eventId) => {
