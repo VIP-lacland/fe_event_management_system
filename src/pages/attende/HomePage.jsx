@@ -98,22 +98,18 @@ const HomePage = () => {
     });
   }, [events, searchQuery, selectedCategory, selectedFilter, selectedCity]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, selectedCategory, selectedFilter, selectedCity]);
-
   const totalPages = Math.max(1, Math.ceil(filteredEvents.length / EVENTS_PER_PAGE));
-
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
+  const visiblePage = Math.min(currentPage, totalPages);
 
   const paginatedEvents = useMemo(() => {
-    const startIndex = (currentPage - 1) * EVENTS_PER_PAGE;
+    const startIndex = (visiblePage - 1) * EVENTS_PER_PAGE;
     return filteredEvents.slice(startIndex, startIndex + EVENTS_PER_PAGE);
-  }, [filteredEvents, currentPage]);
+  }, [filteredEvents, visiblePage]);
+
+  const resetPage = (callback) => (value) => {
+    callback(value);
+    setCurrentPage(1);
+  };
 
   return (
     <main className="homepage">
@@ -148,7 +144,10 @@ const HomePage = () => {
             key={category.key}
             type="button"
             className={`category-card ${selectedCategory === category.key ? 'active' : ''}`}
-            onClick={() => setSelectedCategory(category.key)}
+            onClick={() => {
+              setSelectedCategory(category.key);
+              setCurrentPage(1);
+            }}
           >
             <div className="category-icon">
               <img src={category.image} alt={`${category.label} icon`} />
@@ -161,16 +160,16 @@ const HomePage = () => {
       <HomeContent
         selectedCity={selectedCity}
         selectedFilter={selectedFilter}
-        onCityChange={setSelectedCity}
-        onFilterChange={setSelectedFilter}
+        onCityChange={resetPage(setSelectedCity)}
+        onFilterChange={resetPage(setSelectedFilter)}
         searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
+        onSearchChange={resetPage(setSearchQuery)}
         filteredEvents={filteredEvents}
         paginatedEvents={paginatedEvents}
         loading={loading}
         error={error}
         categoryImages={categoryImages}
-        currentPage={currentPage}
+        currentPage={visiblePage}
         totalPages={totalPages}
         eventsPerPage={EVENTS_PER_PAGE}
         onPageChange={setCurrentPage}

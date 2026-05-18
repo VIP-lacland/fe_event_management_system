@@ -1,94 +1,112 @@
-// src/pages/organizer/dashboard/components/ChartSection.jsx
-
 import { useState } from "react";
-import {
-  BarChart, Bar,
-  LineChart, Line,
-  PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer,
-} from "recharts";
 
-import { ChartCard, CustomTooltip, Skeleton } from "./DashboardUI";
+import { ChartCard, Skeleton } from "./DashboardUI";
 import { PIE_COLORS, BAR_COLOR, LINE_COLOR } from "../dashboardConstants";
 
-// ── Toggle button giữa Bar và Line ───────────────────────────────
 function ChartToggle({ active, onChange }) {
   return (
     <div className="chart-toggle">
       {["bar", "line"].map((type) => (
         <button
           key={type}
+          type="button"
           className={`chart-toggle__btn ${active === type ? "active" : ""}`}
           onClick={() => onChange(type)}
         >
-          {type === "bar" ? "Danh mục" : "Theo tháng"}
+          {type === "bar" ? "Category" : "Monthly"}
         </button>
       ))}
     </div>
   );
 }
 
-// ── Bar chart — events by category ───────────────────────────────
+function EmptyChart() {
+  return <div className="simple-chart__empty">No data</div>;
+}
+
 function EventsByCategoryChart({ data }) {
+  const maxTotal = Math.max(...data.map((item) => Number(item.total) || 0), 1);
+
+  if (!data.length) {
+    return <EmptyChart />;
+  }
+
   return (
-    <ResponsiveContainer width="100%" height={260}>
-      <BarChart data={data} barSize={32}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
-        <XAxis dataKey="category" tick={{ fontSize: 12 }} />
-        <YAxis tick={{ fontSize: 12 }} allowDecimals={false} domain={[0, 'dataMax + 1']}/>
-        <Tooltip content={<CustomTooltip />} />
-        <Bar dataKey="total" name="Sự kiện" fill={BAR_COLOR} radius={[6, 6, 0, 0]} />
-      </BarChart>
-    </ResponsiveContainer>
+    <div className="simple-bar-chart" aria-label="Events by category">
+      {data.map((item) => {
+        const total = Number(item.total) || 0;
+        return (
+          <div className="simple-bar-chart__item" key={item.category}>
+            <div className="simple-bar-chart__track">
+              <span
+                className="simple-bar-chart__bar"
+                style={{
+                  height: `${Math.max((total / maxTotal) * 100, 6)}%`,
+                  background: BAR_COLOR,
+                }}
+              />
+            </div>
+            <strong>{total}</strong>
+            <span>{item.category}</span>
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
-// ── Line chart — registrations per month ─────────────────────────
 function RegistrationsPerMonthChart({ data }) {
+  const maxTotal = Math.max(...data.map((item) => Number(item.total) || 0), 1);
+
+  if (!data.length) {
+    return <EmptyChart />;
+  }
+
   return (
-    <ResponsiveContainer width="100%" height={260}>
-      <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
-        <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-        <YAxis tick={{ fontSize: 12 }} />
-        <Tooltip content={<CustomTooltip />} />
-        <Line
-          type="monotone" dataKey="total" name="Đăng ký"
-          stroke={LINE_COLOR} strokeWidth={2.5}
-          dot={{ r: 4, fill: LINE_COLOR }} activeDot={{ r: 6 }}
-        />
-      </LineChart>
-    </ResponsiveContainer>
+    <div className="simple-line-chart" aria-label="Registrations per month">
+      {data.map((item) => {
+        const total = Number(item.total) || 0;
+        return (
+          <div className="simple-line-chart__row" key={item.month}>
+            <span className="simple-line-chart__label">{item.month}</span>
+            <div className="simple-line-chart__track">
+              <span
+                className="simple-line-chart__bar"
+                style={{
+                  width: `${Math.max((total / maxTotal) * 100, 4)}%`,
+                  background: LINE_COLOR,
+                }}
+              />
+            </div>
+            <strong>{total}</strong>
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
-// ── Donut chart — events by status ───────────────────────────────
 function EventsByStatusChart({ data }) {
+  const totalEvents = data.reduce((sum, item) => sum + (Number(item.total) || 0), 0);
+
+  if (!data.length) {
+    return <EmptyChart />;
+  }
+
   return (
     <>
-      <ResponsiveContainer width="100%" height={200}>
-        <PieChart>
-          <Pie
-            data={data}
-            dataKey="total" nameKey="status"
-            cx="50%" cy="50%"
-            innerRadius={55} outerRadius={85}
-            paddingAngle={3}
-          >
-            {data.map((_, i) => (
-              <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip formatter={(val, name) => [val, name]} />
-        </PieChart>
-      </ResponsiveContainer>
+      <div className="simple-donut" aria-label="Events by status">
+        <span>{totalEvents}</span>
+        <small>Total</small>
+      </div>
 
-      {/* Legend */}
       <div className="pie-legend">
-        {data.map((item, i) => (
-          <div key={i} className="pie-legend__item">
-            <span className="pie-legend__dot" style={{ background: PIE_COLORS[i] }} />
+        {data.map((item, index) => (
+          <div key={item.status} className="pie-legend__item">
+            <span
+              className="pie-legend__dot"
+              style={{ background: PIE_COLORS[index % PIE_COLORS.length] }}
+            />
             <span className="pie-legend__label">{item.status}</span>
             <span className="pie-legend__val">{item.total}</span>
           </div>
@@ -98,23 +116,18 @@ function EventsByStatusChart({ data }) {
   );
 }
 
-// ── Export ChartSection ───────────────────────────────────────────
 export default function ChartSection({ charts, loading }) {
   const [activeChart, setActiveChart] = useState("bar");
 
   const mainTitle = activeChart === "bar"
-    ? "Sự kiện theo danh mục"
-    : "Đăng ký theo tháng";
+    ? "Events by category"
+    : "Registrations by month";
 
   return (
     <section className="dash__charts">
-
-      {/* Main chart — bar hoặc line */}
       <ChartCard
         title={mainTitle}
-        action={
-          <ChartToggle active={activeChart} onChange={setActiveChart} />
-        }
+        action={<ChartToggle active={activeChart} onChange={setActiveChart} />}
       >
         {loading ? (
           <Skeleton h={260} r={10} />
@@ -125,15 +138,13 @@ export default function ChartSection({ charts, loading }) {
         )}
       </ChartCard>
 
-      {/* Side chart — donut */}
-      <ChartCard title="Trạng thái sự kiện">
+      <ChartCard title="Event status">
         {loading ? (
           <Skeleton h={220} r={10} />
         ) : (
           <EventsByStatusChart data={charts.events_by_status ?? []} />
         )}
       </ChartCard>
-
     </section>
   );
 }
