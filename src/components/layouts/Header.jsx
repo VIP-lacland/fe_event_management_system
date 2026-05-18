@@ -7,11 +7,11 @@ const Header = () => {
     <header className="homepage-topbar">
       <div className="homepage-brand">Eventify</div>
       <nav className="homepage-nav" aria-label="Main navigation">
-        <button className="homepage-button" type="button">Update</button>
-        <button className="homepage-button" type="button">Find event</button>
-        <button className="homepage-button" type="button">Create event</button>
-        <button className="homepage-button" type="button">Help center</button>
-        <button className="homepage-button" type="button">Find my tickets</button>
+        <div className="homepage-nav-group">
+          <button className="homepage-button" type="button">Find event</button>
+          <button className="homepage-button" type="button">Help center</button>
+          <button className="homepage-button" type="button">Find my tickets</button>
+        </div>
         <Link to="/login" className="homepage-action primary">Login</Link>
       </nav>
     </header>
