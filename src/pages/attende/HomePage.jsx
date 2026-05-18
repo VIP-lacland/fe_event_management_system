@@ -98,14 +98,18 @@ const HomePage = () => {
     });
   }, [events, searchQuery, selectedCategory, selectedFilter, selectedCity]);
 
+  const totalPages = Math.max(1, Math.ceil(filteredEvents.length / EVENTS_PER_PAGE));
+
+  // Reset to first page when filters change
+
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, selectedCategory, selectedFilter, selectedCity]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredEvents.length / EVENTS_PER_PAGE));
+  // Adjust current page if it exceeds total pages
 
   useEffect(() => {
-    if (currentPage > totalPages) {
+    if (currentPage > totalPages && totalPages > 0) {
       setCurrentPage(totalPages);
     }
   }, [currentPage, totalPages]);
@@ -182,3 +186,9 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+
+
+
+
+
