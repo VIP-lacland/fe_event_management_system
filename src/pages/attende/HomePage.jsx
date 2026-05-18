@@ -6,6 +6,7 @@ import Footer from '../../components/layouts/Footer';
 import './HomePage.css';
 
 const categoryData = [
+  { key: 'All', label: 'ALL', image: '/images/banner.png' },
   { key: 'Music', label: 'MUSIC', image: '/images/music.png' },
   { key: 'Sports', label: 'SPORTS', image: '/images/sports.png' },
   { key: 'Food & Drink', label: 'FOOD & DRINK', image: '/images/food-drink.png' },
@@ -15,13 +16,15 @@ const categoryData = [
 ];
 
 const categoryImages = {
-  Music: 'linear-gradient(135deg, #7c3aed 0%, #ec4899 100%)',
-  Sports: 'linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%)',
-  'Food & Drink': 'linear-gradient(135deg, #f97316 0%, #fb923c 100%)',
-  Arts: 'linear-gradient(135deg, #facc15 0%, #eab308 100%)',
-  Education: 'linear-gradient(135deg, #14b8a6 0%, #0f766e 100%)',
-  Community: 'linear-gradient(135deg, #c2410c 0%, #ea580c 100%)',
+  Music: "linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(236, 72, 153, 0.36)), url('/images/music.png')",
+  Sports: "linear-gradient(135deg, rgba(14, 165, 233, 0.16), rgba(6, 182, 212, 0.34)), url('/images/sports.png')",
+  'Food & Drink': "linear-gradient(135deg, rgba(249, 115, 22, 0.16), rgba(251, 146, 60, 0.34)), url('/images/food-drink.png')",
+  Arts: "linear-gradient(135deg, rgba(250, 204, 21, 0.16), rgba(234, 179, 8, 0.34)), url('/images/arts.png')",
+  Education: "linear-gradient(135deg, rgba(20, 184, 166, 0.16), rgba(15, 118, 110, 0.34)), url('/images/education.png')",
+  Community: "linear-gradient(135deg, rgba(194, 65, 12, 0.16), rgba(234, 88, 12, 0.34)), url('/images/community.png')",
 };
+
+const EVENTS_PER_PAGE = 6;
 
 const normalizeCity = (city) =>
   city
@@ -38,6 +41,7 @@ const HomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedFilter, setSelectedFilter] = useState('All');
   const [selectedCity, setSelectedCity] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -94,6 +98,23 @@ const HomePage = () => {
     });
   }, [events, searchQuery, selectedCategory, selectedFilter, selectedCity]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, selectedFilter, selectedCity]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredEvents.length / EVENTS_PER_PAGE));
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  const paginatedEvents = useMemo(() => {
+    const startIndex = (currentPage - 1) * EVENTS_PER_PAGE;
+    return filteredEvents.slice(startIndex, startIndex + EVENTS_PER_PAGE);
+  }, [filteredEvents, currentPage]);
+
   return (
     <main className="homepage">
       <Header />
@@ -109,7 +130,7 @@ const HomePage = () => {
           <span className="hero-kicker">Featured Event</span>
           <h1>A Night for Every Star</h1>
           <p>
-            Đêm Year End Party 2025 tại Đà Nẵng với âm nhạc, ánh sáng và không gian kết nối dành cho cộng đồng.
+            Đêm Year End Party 2026 tại Đà Nẵng với âm nhạc, ánh sáng và không gian kết nối dành cho cộng đồng.
           </p>
           <div className="hero-actions">
             <a href="#events" className="hero-primary-action">Xem sự kiện</a>
@@ -123,17 +144,17 @@ const HomePage = () => {
 
       <section className="category-row">
         {categoryData.map((category) => (
-          <div
+          <button
             key={category.key}
-            className="category-card"
+            type="button"
+            className={`category-card ${selectedCategory === category.key ? 'active' : ''}`}
             onClick={() => setSelectedCategory(category.key)}
-            style={{ cursor: 'pointer' }}
           >
             <div className="category-icon">
               <img src={category.image} alt={`${category.label} icon`} />
             </div>
             <span>{category.label}</span>
-          </div>
+          </button>
         ))}
       </section>
 
@@ -145,9 +166,14 @@ const HomePage = () => {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         filteredEvents={filteredEvents}
+        paginatedEvents={paginatedEvents}
         loading={loading}
         error={error}
         categoryImages={categoryImages}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        eventsPerPage={EVENTS_PER_PAGE}
+        onPageChange={setCurrentPage}
       />
 
       <Footer />
