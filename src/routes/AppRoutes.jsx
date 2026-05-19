@@ -1,7 +1,7 @@
 // src/routes/AppRoutes.jsx
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import OrganizerLayout from "../components/layouts/MainLayouts/OrganizerLayout";
-import HomePage from "../pages/attende/HomePage";
+import HomePage from "../pages/attendee/HomePage";
 import LoginPage from "../pages/guest/LoginPage";
 // import CreateEventForm from "../pages/organizer/event/CreateEventForm";
 // import { EditEventPage } from "../pages/EditEventPage";
