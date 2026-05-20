@@ -1,6 +1,6 @@
 .event-detail-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #f4f8ff 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #111827 0%, #f5fbff 100%);
   padding: 2rem 2rem 3rem;
   color: #102a43;
   font-family: Inter, system-ui, sans-serif;
@@ -175,11 +175,14 @@
 }
 
 .detail-ticket-card span {
+  display: block;
   color: rgba(248,250,252,0.75);
   font-size: 0.85rem;
+  margin-bottom: 0.3rem;
 }
 
 .detail-ticket-card strong {
+  display: block;
   font-size: 1.5rem;
   line-height: 1.1;
 }

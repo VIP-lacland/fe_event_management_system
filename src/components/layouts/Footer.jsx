@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="footer-grid">
           <div className="footer-col">
             <h3>Eventify</h3>
-            <p>Thiết kế để giúp bạn tìm kiếm sự kiện, kết nối trải nghiệm và giữ liên lạc với cộng đồng.</p>
+            <p>Designed to help you find events, connect experiences, and stay in touch with the community.</p>
           </div>
           <div className="footer-col">
             <h3>Resources</h3>

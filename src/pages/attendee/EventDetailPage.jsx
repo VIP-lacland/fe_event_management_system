@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { EventService } from '../../services/EventService';
+import { useAuthStore } from '../../store/authStore';
 import './EventDetailPage.css';
 
 const categoryLogos = {
@@ -14,6 +15,8 @@ const categoryLogos = {
 
 const EventDetailPage = () => {
   const { eventId } = useParams();
+  const navigate = useNavigate();
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -39,7 +42,15 @@ const EventDetailPage = () => {
     }
   }, [eventId]);
 
-  const ticketType = event?.price ? `Có phí: ${event.price}` : 'Miễn phí';
+  const handleRegisterClick = () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    } else {
+      navigate(`/event/${eventId}/register`);
+    }
+  };
+
+  const ticketType = event?.price > 0 ? `$${parseFloat(event.price).toFixed(2)}` : 'Free';
   const registered = event?.confirmed_count ?? 0;
   const capacity = event?.capacity ?? 0;
   const isFull = capacity > 0 && registered >= capacity;
@@ -48,10 +59,10 @@ const EventDetailPage = () => {
   return (
     <main className="event-detail-page">
       <div className="detail-breadcrumbs">
-        <Link to="/" className="detail-back-link">← Quay lại</Link>
+        <Link to="/" className="detail-back-link">← Back</Link>
       </div>
 
-      {loading && <div className="detail-empty">Đang tải chi tiết sự kiện...</div>}
+      {loading && <div className="detail-empty">Loading event details...</div>}
       {error && <div className="detail-empty detail-error">{error}</div>}
 
       {!loading && !error && event && (
@@ -62,13 +73,13 @@ const EventDetailPage = () => {
               <h1>{event.title}</h1>
               <p>{event.location}</p>
               <div className="detail-hero-meta">
-                <span>{new Date(event.event_date).toLocaleDateString('vi-VN', {
+                <span>{new Date(event.event_date).toLocaleDateString('en-US', {
                   weekday: 'long',
                   day: '2-digit',
                   month: 'long',
                   year: 'numeric',
                 })}</span>
-                <span>{new Date(event.event_date).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}</span>
+                <span>{new Date(event.event_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
               </div>
             </div>
           </div>
@@ -76,30 +87,30 @@ const EventDetailPage = () => {
           <div className="detail-body">
             <div className="detail-panel detail-summary">
               <div className="detail-section">
-                <h2>Thông tin chính</h2>
-                <p>{event.description || 'Sự kiện này chưa có mô tả chi tiết.'}</p>
+                <h2>Event Information</h2>
+                <p>{event.description || 'No detailed description provided for this event.'}</p>
               </div>
 
               <div className="detail-grid">
                 <div className="detail-item">
-                  <span>Loại sự kiện</span>
+                  <span>Category</span>
                   <strong>{event.category}</strong>
                 </div>
                 <div className="detail-item">
-                  <span>Giá vé</span>
+                  <span>Ticket Price</span>
                   <strong>{ticketType}</strong>
                 </div>
                 <div className="detail-item">
-                  <span>Địa điểm</span>
+                  <span>Location</span>
                   <strong>{event.location}</strong>
                 </div>
                 <div className="detail-item">
-                  <span>Số người đăng ký</span>
+                  <span>Registered</span>
                   <strong>{registered}/{capacity}</strong>
                 </div>
                 <div className="detail-item">
-                  <span>Trạng thái chỗ</span>
-                  <strong>{isFull ? 'Đã đầy' : 'Còn vé'}</strong>
+                  <span>Availability</span>
+                  <strong>{isFull ? 'Sold Out' : 'Available'}</strong>
                 </div>
               </div>
             </div>
@@ -107,14 +118,14 @@ const EventDetailPage = () => {
             <aside className="detail-panel detail-actions">
               <div className="detail-ticket-card">
                 <div>
-                  <span>Trạng thái sự kiện</span>
-                  <strong>{event.status === 'published' ? 'Đã công bố' : event.status}</strong>
+                  <span>Status</span>
+                  <strong>{event.status === 'published' ? 'Published' : event.status}</strong>
                 </div>
                 <div className="detail-price-pill">{ticketType}</div>
               </div>
 
-              <button className="detail-register-btn" type="button" disabled={isFull}>
-                {isFull ? 'Hết vé' : 'Đăng ký sự kiện'}
+              <button className="detail-register-btn" type="button" disabled={isFull} onClick={handleRegisterClick}>
+                {isFull ? 'Sold Out' : 'Register Now'}
               </button>
             </aside>
           </div>

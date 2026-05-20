@@ -43,6 +43,21 @@ export const EventService = {
     const response = await api.patch(`/organizer/events/${id}/status`, { status });
     return response.data;
   },
+
+  registerEvent: async (id) => {
+    const response = await api.post(`/events/${id}/register`);
+    return response.data;
+  },
+
+  getMyTickets: async () => {
+    const response = await api.get("/attendee/tickets");
+    return response.data;
+  },
+
+  cancelTicket: async (eventId) => {
+    const response = await api.delete(`/attendee/tickets/${eventId}`);
+    return response.data;
+  }
 };
 
 export const GetEvents = EventService.getEvents;
@@ -51,3 +66,5 @@ export const CreateEvent = EventService.createEvent;
 export const UpdateEvent = EventService.updateEvent;
 export const DeleteEvent = EventService.deleteEvent;
 export const UpdateEventStatus = EventService.updateEventStatus;
+export const GetMyTickets = EventService.getMyTickets;
+export const CancelTicket = EventService.cancelTicket;

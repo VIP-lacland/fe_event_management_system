@@ -1,0 +1,181 @@
+.my-tickets-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8fafc;
+}
+
+.tickets-main {
+  flex: 1;
+  padding: 3rem 1rem;
+  padding-top: 100px;
+}
+
+.tickets-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tickets-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 2rem;
+}
+
+.tickets-loading, .tickets-error, .tickets-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.tickets-error {
+  color: #ef4444;
+}
+
+.tickets-empty p {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin-bottom: 1.5rem;
+}
+
+.tickets-btn-primary {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff2d95 0%, #ff7a00 100%);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.tickets-btn-primary:hover {
+  opacity: 0.9;
+}
+
+.tickets-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.ticket-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  border-left: 6px solid #10b981;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ticket-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.ticket-card.cancelled {
+  border-left-color: #94a3b8;
+  opacity: 0.8;
+}
+
+.ticket-card-content {
+  padding: 1.5rem;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ticket-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-confirmed {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.badge-waitlist {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.badge-cancelled {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.ticket-date {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.ticket-event-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 1rem;
+}
+
+.ticket-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.ticket-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  align-items: center;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 1.25rem;
+}
+
+.ticket-btn-view {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.ticket-btn-view:hover {
+  text-decoration: underline;
+}
+
+.ticket-btn-cancel {
+  background: transparent;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ticket-btn-cancel:hover {
+  background: #fef2f2;
+}

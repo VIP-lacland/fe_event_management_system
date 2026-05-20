@@ -7,8 +7,10 @@ import LoginPage from "../pages/guest/LoginPage";
 // import { EditEventPage } from "../pages/EditEventPage";
 import { getOrganizerRoutes } from "./OrganizerRoutes";
 import ProtectedRoute from "./ProtectedRoute";
-
 import EventDetailPage from "../pages/attendee/EventDetailPage";
+import EventRegistrationPage from "../pages/attendee/EventRegistrationPage";
+import ProfilePage from "../pages/attendee/ProfilePage";
+import MyTicketsPage from "../pages/attendee/MyTicketsPage";
 
 const publicRoutes = [
   {
@@ -20,6 +22,33 @@ const publicRoutes = [
     path: "/event/:eventId",
     element: <EventDetailPage />,
     handle: { public: true },
+  },
+  {
+    path: "/event/:eventId/register",
+    element: (
+      <ProtectedRoute allowedRoles={["attendee"]}>
+        <EventRegistrationPage />
+      </ProtectedRoute>
+    ),
+    handle: { requiresAuth: true, allowedRoles: ["attendee"] },
+  },
+  {
+    path: "/profile",
+    element: (
+      <ProtectedRoute>
+        <ProfilePage />
+      </ProtectedRoute>
+    ),
+    handle: { requiresAuth: true },
+  },
+  {
+    path: "/my-tickets",
+    element: (
+      <ProtectedRoute>
+        <MyTicketsPage />
+      </ProtectedRoute>
+    ),
+    handle: { requiresAuth: true },
   },
   {
     path: "/login",

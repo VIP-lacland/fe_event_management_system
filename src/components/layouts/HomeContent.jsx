@@ -1,6 +1,6 @@
 import CityDropdown from '../ui/CityDropdown';
 import SearchBar from '../ui/SearchBar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const filters = ['All', 'For you', 'Today', 'This weekend'];
 
@@ -84,9 +84,9 @@ const HomeContent = ({
                 </div>
                 <div className="event-footer">
                   <span className="event-label">{event.category}</span>
-                  <button className="event-action btn-chi-tiet" type="button" onClick={() => navigate(`/event/${event.id}`)}>
-                    Chi tiết sự kiện
-                  </button>
+                  <Link to={`/event/${event.id}`} className="event-action btn-chi-tiet">
+                    Event Details
+                  </Link>
                 </div>
               </div>
             </article>
