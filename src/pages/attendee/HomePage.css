@@ -246,6 +246,49 @@
 .event-action { border:none; background:#111827; color:#ffffff; padding:0.65rem 1rem; border-radius:999px; cursor:pointer; font-weight:700; letter-spacing:0.01em; box-shadow:0 12px 22px rgba(17,24,39,0.16); transition: transform 0.18s ease, background 0.18s ease; }
 .event-action:hover { background:#1f2937; transform:translateY(-1px); }
 
+/* Beautiful "Chi tiết sự kiện" button */
+.btn-chi-tiet {
+  background: linear-gradient(135deg, #ff2d95 0%, #ff7a00 100%);
+  color: #ffffff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(255, 45, 149, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-chi-tiet::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, #ff7a00 0%, #ffd400 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  border-radius: 14px;
+}
+
+.btn-chi-tiet:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(255, 122, 0, 0.35), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.btn-chi-tiet:hover::before {
+  opacity: 1;
+}
+
+.btn-chi-tiet:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 12px rgba(255, 45, 149, 0.2);
+}
+
 .pagination-bar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-top:1.5rem; padding:1rem; border:1px solid rgba(0,0,0,0.06); border-radius:10px; background:white; box-shadow:0 8px 28px rgba(4,38,59,0.05); }
 .pagination-summary { margin:0; color:var(--muted); font-size:0.95rem; }
 .pagination-controls { display:flex; align-items:center; flex-wrap:wrap; gap:0.45rem; }

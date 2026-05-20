@@ -1,5 +1,6 @@
 import CityDropdown from '../ui/CityDropdown';
 import SearchBar from '../ui/SearchBar';
+import { useNavigate } from 'react-router-dom';
 
 const filters = ['All', 'For you', 'Today', 'This weekend'];
 
@@ -20,6 +21,7 @@ const HomeContent = ({
   eventsPerPage,
   onPageChange,
 }) => {
+  const navigate = useNavigate();
   const firstEventNumber = filteredEvents.length === 0
     ? 0
     : (currentPage - 1) * eventsPerPage + 1;
@@ -82,8 +84,8 @@ const HomeContent = ({
                 </div>
                 <div className="event-footer">
                   <span className="event-label">{event.category}</span>
-                  <button className="event-action" type="button">
-                    View details
+                  <button className="event-action btn-chi-tiet" type="button" onClick={() => navigate(`/event/${event.id}`)}>
+                    Chi tiết sự kiện
                   </button>
                 </div>
               </div>

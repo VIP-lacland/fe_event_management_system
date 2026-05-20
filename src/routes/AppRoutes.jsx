@@ -8,10 +8,17 @@ import LoginPage from "../pages/guest/LoginPage";
 import { getOrganizerRoutes } from "./OrganizerRoutes";
 import ProtectedRoute from "./ProtectedRoute";
 
+import EventDetailPage from "../pages/attendee/EventDetailPage";
+
 const publicRoutes = [
   {
     path: "/",
     element: <HomePage />,
+    handle: { public: true },
+  },
+  {
+    path: "/event/:eventId",
+    element: <EventDetailPage />,
     handle: { public: true },
   },
   {
