@@ -40,7 +40,7 @@ const LoginPage = () => {
       const redirectPath =
         responseData.user.role === "attendee"
           ? "/attendee/home"
-          : "/organizer/home";
+          : "/organizer/dashboard";
 
       setTimeout(() => {
         navigate(redirectPath, { replace: true });

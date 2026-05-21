@@ -13,10 +13,24 @@ const AttendeeManagementPage = () => {
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [statusFilter, setStatusFilter] = useState("pending");
 
   useEffect(() => {
     fetchData();
   }, [eventId]);
+
+  const filteredRegistrations = registrations.filter(
+    (reg) => reg.status === statusFilter
+  );
+
+  // ✅ Sort waitlist by position
+  const displayRegistrations = 
+    statusFilter === "waitlist"
+      ? [...filteredRegistrations].sort((a, b) => (a.position || 999) - (b.position || 999))
+      : filteredRegistrations;
+
+  // ✅ Xác định có hiển thị cột Position không
+  const showPositionColumn = statusFilter === "waitlist";
 
   const fetchData = async () => {
     try {
@@ -39,14 +53,13 @@ const AttendeeManagementPage = () => {
   const handleUpdateStatus = async (registrationId, newStatus) => {
     try {
       await UpdateRegistrationStatus(eventId, registrationId, newStatus);
-      // Update local state
       setRegistrations(
         registrations.map((reg) => {
           if (reg.id === registrationId) {
             return { ...reg, status: newStatus };
           }
           return reg;
-        }),
+        })
       );
     } catch (err) {
       alert(err.response?.data?.message || "Error updating status");
@@ -65,6 +78,25 @@ const AttendeeManagementPage = () => {
         </div>
       </div>
 
+      <div className="status-filters">
+        {[
+          { key: "confirmed", label: "Confirmed" },
+          { key: "pending", label: "Pending" },
+          {
+            key: "waitlist",
+            label: `Waitlist (${registrations.filter((r) => r.status === "waitlist").length})`,
+          },
+        ].map((filter) => (
+          <button
+            key={filter.key}
+            className={`filter-btn ${statusFilter === filter.key ? "active" : ""}`}
+            onClick={() => setStatusFilter(filter.key)}
+          >
+            {filter.label}
+          </button>
+        ))}
+      </div>
+
       {loading ? (
         <div className="loading-state">Loading attendees...</div>
       ) : error ? (
@@ -74,6 +106,8 @@ const AttendeeManagementPage = () => {
           <table className="attendee-table">
             <thead>
               <tr>
+                {/* ✅ Chỉ hiển thị cột Position khi là Waitlist */}
+                {showPositionColumn && <th>Position</th>}
                 <th>Name</th>
                 <th>Email</th>
                 <th>Date Registered</th>
@@ -82,56 +116,84 @@ const AttendeeManagementPage = () => {
               </tr>
             </thead>
             <tbody>
-              {registrations.length === 0 ? (
+              {displayRegistrations.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="empty-row">
-                    No attendees registered yet.
+                  {/* ✅ colSpan động: 6 nếu có Position, 5 nếu không */}
+                  <td colSpan={showPositionColumn ? 6 : 5} className="empty-row">
+                    No {statusFilter} registrations found.
                   </td>
                 </tr>
               ) : (
-                registrations.map((reg) => (
-                  <tr key={reg.id}>
-                    <td>{reg.attendee?.name || "Unknown"}</td>
-                    <td>{reg.attendee?.email || "N/A"}</td>
-                    <td>
-                      {new Date(reg.created_at).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </td>
-                    <td>
-                      <span className={`status-badge status-${reg.status}`}>
-                        {reg.status.charAt(0).toUpperCase() +
-                          reg.status.slice(1)}
-                      </span>
-                    </td>
-                    <td>
-                      {reg.status === "pending" && (
-                        <div className="action-buttons">
-                          <button
-                            className="btn-approve"
-                            onClick={() =>
-                              handleUpdateStatus(reg.id, "confirmed")
-                            }
-                          >
-                            Approve
-                          </button>
-                          <button
-                            className="btn-reject"
-                            onClick={() =>
-                              handleUpdateStatus(reg.id, "rejected")
-                            }
-                          >
-                            Reject
-                          </button>
-                        </div>
+                displayRegistrations.map((reg) => {
+                  const statusClass = `status-${reg.status}`;
+                  const statusLabel = reg.status.charAt(0).toUpperCase() + reg.status.slice(1);
+
+                  return (
+                    <tr key={reg.id}>
+                      {/* ✅ Chỉ hiển thị Position khi là Waitlist */}
+                      {showPositionColumn && (
+                        <td>
+                          {reg.position ? (
+                            <strong>#{reg.position}</strong>
+                          ) : (
+                            <span style={{ color: "#cbd5e1" }}>-</span>
+                          )}
+                        </td>
                       )}
-                    </td>
-                  </tr>
-                ))
+                      
+                      <td>{reg.attendee?.name || "Unknown"}</td>
+                      <td>{reg.attendee?.email || "N/A"}</td>
+                      <td>
+                        {new Date(reg.created_at).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </td>
+                      <td>
+                        <span className={`status-badge ${statusClass}`}>
+                          {statusLabel}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="action-buttons">
+                          {reg.status === "pending" && (
+                            <>
+                              <button
+                                className="btn-approve"
+                                onClick={() =>
+                                  handleUpdateStatus(reg.id, "confirmed")
+                                }
+                              >
+                                Approve
+                              </button>
+                              <button
+                                className="btn-reject"
+                                onClick={() =>
+                                  handleUpdateStatus(reg.id, "rejected")
+                                }
+                              >
+                                Reject
+                              </button>
+                            </>
+                          )}
+                          {reg.status === "waitlist" && (
+                            <button
+                              className="btn-reject"
+                              onClick={() =>
+                                handleUpdateStatus(reg.id, "rejected")
+                              }
+                            >
+                              Remove
+                            </button>
+                          )}
+                          {reg.status === "confirmed" && (
+                            <span style={{ color: "#cbd5e1" }}>-</span>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

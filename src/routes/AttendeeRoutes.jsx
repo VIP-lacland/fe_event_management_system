@@ -12,7 +12,7 @@ export function getAttendeeRoutes() {
         },
         {
             path: "event/:eventId/register",
-            Componet: EventRegistrationPage,
+            Component: EventRegistrationPage,
         },
         {
             path: "profile",

@@ -46,7 +46,7 @@ const EventDetailPage = () => {
     if (!isAuthenticated) {
       navigate("/login");
     } else {
-      navigate(`/event/${eventId}/register`);
+      navigate(`/attendee/event/${eventId}/register`);
     }
   };
 

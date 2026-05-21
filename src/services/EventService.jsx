@@ -68,16 +68,7 @@ export const EventService = {
       autoPromoted: response.data.auto_promoted, // true nếu có người được promote
     };
   },
-
-  promoteFromWaitlist: async (eventId, registrationId) => {
-    // Reuse updateRegistrationStatus với status='confirmed'
-    const response = await api.patch(
-      `/organizer/events/${eventId}/registrations/${registrationId}/status`,
-      { status: "confirmed" },
-    );
-    return response.data;
-  },
-
+  
   getRegistrations: async (eventId) => {
     const response = await api.get(
       `/organizer/events/${eventId}/registrations`,

@@ -54,7 +54,7 @@ const Header = () => {
           <button
             className="homepage-button"
             type="button"
-            onClick={() => navigate("/my-tickets")}
+            onClick={() => navigate("/attendee/my-tickets")}
           >
             Find my tickets
           </button>
