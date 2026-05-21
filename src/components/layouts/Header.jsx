@@ -37,7 +37,7 @@ const Header = () => {
         <button className="homepage-button" type="button">Contact</button>
           <button className="homepage-button" type="button">Find event</button>
           <button className="homepage-button" type="button">Help center</button>
-          <button className="homepage-button" type="button">Find my tickets</button>
+          <button className="homepage-button" type="button" onClick={() => navigate('/my-tickets')}>Find my tickets</button>
         </div>
         
         {isAuthenticated && user ? (

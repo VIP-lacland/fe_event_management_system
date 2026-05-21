@@ -82,7 +82,8 @@ const MyTicketsPage = () => {
                       <div className="ticket-header">
                         <span className={`ticket-status badge-${ticket.status}`}>
                           {ticket.status === 'confirmed' ? 'Confirmed' : 
-                           ticket.status === 'waitlist' ? 'Pending Approval' : 'Cancelled'}
+                           ticket.status === 'waitlist' ? 'Waitlist' : 
+                           ticket.status === 'pending' ? 'Pending Approval' : 'Cancelled'}
                         </span>
                         <span className="ticket-date">Registered on: {new Date(ticket.created_at).toLocaleDateString('en-US')}</span>
                       </div>

@@ -57,6 +57,16 @@ export const EventService = {
   cancelTicket: async (eventId) => {
     const response = await api.delete(`/attendee/tickets/${eventId}`);
     return response.data;
+  },
+
+  getRegistrations: async (eventId) => {
+    const response = await api.get(`/organizer/events/${eventId}/registrations`);
+    return response.data;
+  },
+
+  updateRegistrationStatus: async (eventId, registrationId, status) => {
+    const response = await api.patch(`/organizer/events/${eventId}/registrations/${registrationId}/status`, { status });
+    return response.data;
   }
 };
 
@@ -68,3 +78,5 @@ export const DeleteEvent = EventService.deleteEvent;
 export const UpdateEventStatus = EventService.updateEventStatus;
 export const GetMyTickets = EventService.getMyTickets;
 export const CancelTicket = EventService.cancelTicket;
+export const GetRegistrations = EventService.getRegistrations;
+export const UpdateRegistrationStatus = EventService.updateRegistrationStatus;
