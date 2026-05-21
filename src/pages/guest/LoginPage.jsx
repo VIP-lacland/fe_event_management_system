@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate, Link} from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
 import { Login } from "../../services/AuthService";
-import "./Login.css";
+import "./LoginPage.css";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const LoginPage = () => {
 
       const redirectPath =
         responseData.user.role === "attendee"
-          ? "/attendee"
+          ? "/attendee/home"
           : "/organizer/home";
 
       setTimeout(() => {

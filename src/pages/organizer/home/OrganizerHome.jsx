@@ -1,7 +1,7 @@
 // src/pages/organizer/Home/Home.jsx
-import "./Home.css";
+import "./OrganizerHome.css";
 
-const HomePage = () => {
+const OrganizerHomePage = () => {
   console.log('✅ HomePage component rendered!'); // ← Thêm dòng này
   
   return (
@@ -12,4 +12,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage; 
+export default OrganizerHomePage; 

@@ -1,18 +1,22 @@
-import React from "react";
-import useDashboard from "./dashboard/hooks/useDashboard";
-import PendingRegistrationsTable from "./dashboard/components/PendingRegistrationsTable";
-import "./dashboard/Dashboard.css"; // Reuse dashboard styles
+import useDashboard from "../dashboard/hooks/useDashboard";
+import PendingRegistrationsTable from "../dashboard/components/PendingRegistrationsTable";
+import "../dashboard/Dashboard.css"; // Reuse dashboard styles
 
 function PageHeader() {
   const today = new Date().toLocaleDateString("vi-VN", {
-    weekday: "long", day: "numeric", month: "long", year: "numeric",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   });
 
   return (
     <header className="dash__header">
       <div>
         <h1 className="dash__title">Yêu cầu phê duyệt</h1>
-        <p className="dash__sub">Quản lý các lượt đăng ký đang chờ duyệt của tất cả sự kiện</p>
+        <p className="dash__sub">
+          Quản lý các lượt đăng ký đang chờ duyệt của tất cả sự kiện
+        </p>
       </div>
       <div className="dash__date">{today}</div>
     </header>
@@ -42,9 +46,9 @@ export default function PendingRegistrationsPage() {
 
       {error && <ErrorBanner message={error} onRetry={refetch} />}
 
-      <PendingRegistrationsTable 
-        pendingList={data?.pending_registrations} 
-        loading={loading} 
+      <PendingRegistrationsTable
+        pendingList={data?.pending_registrations}
+        loading={loading}
       />
     </div>
   );

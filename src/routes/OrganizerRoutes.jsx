@@ -1,17 +1,17 @@
 // src/routes/OrganizerRoutes.jsx
-import HomePage from "../pages/organizer/home/Home";
+import OrganizerHomePage from "../pages/organizer/home/OrganizerHome";
 import Dashboard from "../pages/organizer/dashboard/Dashboard";
 import CreateEventForm from "../pages/organizer/event/CreateEventForm";
-import EditEventPage  from "../pages/organizer/event/EditEventPage";
-import EventListPage  from "../pages/organizer/event/EventListPage";
-import AttendeeManagementPage from "../pages/organizer/AttendeeManagementPage";
-import PendingRegistrationsPage from "../pages/organizer/PendingRegistrationsPage";
+import EditEventPage from "../pages/organizer/event/EditEventPage";
+import EventListPage from "../pages/organizer/event/EventListPage";
+import AttendeeManagementPage from "../pages/organizer/attendeeManagement/AttendeeManagementPage";
+import PendingRegistrationsPage from "../pages/organizer/attendeeManagement/PendingRegistrationsPage";
 
 export function getOrganizerRoutes() {
   return [
     {
       path: "home",
-      Component: HomePage,
+      Component: OrganizerHomePage,
     },
     {
       path: "dashboard",
