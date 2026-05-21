@@ -18,7 +18,6 @@ export async function createUser(user) {
   }
 }
 
-
 export async function getUserById(id) {
     try {
         return await api.get(`/api/user/${id}`);

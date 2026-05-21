@@ -7,7 +7,6 @@ import "./LoginPage.css";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  // const location = useLocation();
   const login = useAuthStore((state) => state.login);
 
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -15,7 +14,6 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState("");
 
-  // const from = location.state?.from?.pathname || "/dashboard";
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -23,13 +23,11 @@ const AttendeeManagementPage = () => {
     (reg) => reg.status === statusFilter
   );
 
-  // ✅ Sort waitlist by position
   const displayRegistrations = 
     statusFilter === "waitlist"
       ? [...filteredRegistrations].sort((a, b) => (a.position || 999) - (b.position || 999))
       : filteredRegistrations;
 
-  // ✅ Xác định có hiển thị cột Position không
   const showPositionColumn = statusFilter === "waitlist";
 
   const fetchData = async () => {
@@ -106,7 +104,6 @@ const AttendeeManagementPage = () => {
           <table className="attendee-table">
             <thead>
               <tr>
-                {/* ✅ Chỉ hiển thị cột Position khi là Waitlist */}
                 {showPositionColumn && <th>Position</th>}
                 <th>Name</th>
                 <th>Email</th>
@@ -118,7 +115,6 @@ const AttendeeManagementPage = () => {
             <tbody>
               {displayRegistrations.length === 0 ? (
                 <tr>
-                  {/* ✅ colSpan động: 6 nếu có Position, 5 nếu không */}
                   <td colSpan={showPositionColumn ? 6 : 5} className="empty-row">
                     No {statusFilter} registrations found.
                   </td>
@@ -130,7 +126,6 @@ const AttendeeManagementPage = () => {
 
                   return (
                     <tr key={reg.id}>
-                      {/* ✅ Chỉ hiển thị Position khi là Waitlist */}
                       {showPositionColumn && (
                         <td>
                           {reg.position ? (
