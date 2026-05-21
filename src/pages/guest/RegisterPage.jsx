@@ -1,7 +1,7 @@
 // src/pages/guest/RegisterPage.jsx
 import React, { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import AuthService from '../../services/AuthService';
+import { Register, resendVerification } from '../../services/AuthService';
 import './RegisterPage.css';
 
 const RegisterPage = () => {
@@ -83,7 +83,7 @@ const RegisterPage = () => {
         role: formData.role
       };
 
-      const response = await AuthService.register(registerData);
+      const response = await Register(registerData);
 
       if (response.success) {
         setSuccessMessage(response.message);
@@ -132,7 +132,7 @@ const RegisterPage = () => {
     }
 
     try {
-      const response = await AuthService.resendVerification(formData.email);
+      const response = await resendVerification(formData.email);
       if (response.success) {
         setSuccessMessage(response.message);
         setApiError('');
