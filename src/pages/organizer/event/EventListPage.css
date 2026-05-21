@@ -293,6 +293,99 @@
 }
 
 /* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .events-page {
+    padding: 20px 14px;
+  }
+  .events-page__filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .events-page__search,
+  .events-page__filter-select {
+    width: 100%;
+  }
+  .events-page__summary {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .events-page {
+    padding: 18px 14px 24px;
+  }
+  .events-page__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .events-page__create-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .events-page__filters {
+    gap: 12px;
+  }
+  .events-page__summary {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .events-page__table-wrap {
+    overflow-x: hidden;
+  }
+  .events-page .ev-table {
+    display: block;
+    width: 100%;
+  }
+  .events-page .ev-table thead {
+    display: none;
+  }
+  .events-page .ev-table tbody {
+    display: grid;
+    gap: 12px;
+  }
+  .events-page .ev-table tr {
+    display: grid;
+    gap: 10px;
+    padding: 14px 16px;
+    border: 1px solid #e8eaf0;
+    border-radius: 16px;
+    background: #ffffff;
+  }
+  .events-page .ev-table td {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0;
+    border: none;
+    align-items: center;
+  }
+  .events-page .ev-table td::before {
+    content: '';
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 600;
+    white-space: nowrap;
+    min-width: 110px;
+    flex: 0 0 auto;
+  }
+  .events-page .ev-table__title::before { content: 'Tên sự kiện'; }
+  .events-page td:nth-of-type(2)::before { content: 'Danh mục'; }
+  .events-page td:nth-of-type(3)::before { content: 'Ngày'; }
+  .events-page td:nth-of-type(4)::before { content: 'Đăng ký'; }
+  .events-page td:nth-of-type(5)::before { content: 'Tỷ lệ lấp đầy'; }
+  .events-page td:nth-of-type(6)::before { content: 'Trạng thái'; }
+  .events-page td:nth-of-type(7)::before { content: 'Hành động'; }
+  .events-page .ev-table__title,
+  .events-page .ev-table__date,
+  .events-page .ev-table__cap {
+    max-width: 100%;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+}
+
 @media (max-width: 640px) {
   .events-page { padding: 16px; }
   .events-page__header { flex-direction: column; align-items: flex-start; }

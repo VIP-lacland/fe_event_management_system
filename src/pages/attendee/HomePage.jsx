@@ -129,7 +129,7 @@ const HomePage = () => {
             Đêm Year End Party 2026 tại Đà Nẵng với âm nhạc, ánh sáng và không gian kết nối dành cho cộng đồng.
           </p>
           <div className="hero-actions">
-            <a href="#events" className="hero-primary-action">Xem sự kiện</a>
+            <a href="#events" className="hero-primary-action">View Events</a>
             <div className="hero-meta">
               <span>23.01.2026</span>
               <span>Đà Nẵng Convention Center</span>

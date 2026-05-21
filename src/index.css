@@ -15,11 +15,17 @@
 html,
 body,
 #root {
+  width: 100%;
   min-height: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  touch-action: pan-y;
+  overscroll-behavior-x: none;
 }
 
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 a {
@@ -32,4 +38,27 @@ input,
 select,
 textarea {
   font: inherit;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 1024px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 13px;
+  }
 }

@@ -66,6 +66,17 @@ function EventRow({ ev }) {
       <td>
         <StatusBadge status={status} />
       </td>
+      <td>
+        <Link to={`/organizer/events/${id}/attendees`} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: '#e0f2fe', color: '#0284c7', padding: '4px 8px', borderRadius: '4px', textDecoration: 'none', fontSize: '13px', fontWeight: '500' }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          Attendees
+        </Link>
+      </td>
     </tr>
   );
 }
@@ -110,6 +121,7 @@ export default function RecentEventsTable({ events, loading }) {
                   <th>Đã đăng ký</th>
                   <th>Số lượng đăng ký</th>
                   <th>Trạng thái</th>
+                  <th>Hành động</th>
                 </tr>
               </thead>
               <tbody>

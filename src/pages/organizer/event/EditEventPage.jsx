@@ -123,7 +123,7 @@ export default function EditEventPage() {
   };
 
   // Tiêu đề trang
-  const pageTitle = isReadOnly ? 'Chi tiết sự kiện' : 'Chỉnh sửa sự kiện';
+  const pageTitle = isReadOnly ? 'Event Details' : 'Edit Event';
 
   return (
     <div className="edit-event-container">

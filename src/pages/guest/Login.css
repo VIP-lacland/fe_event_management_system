@@ -149,3 +149,15 @@
   color: #4338ca;
   text-decoration: underline;
 }
+
+@media (max-width: 640px) {
+  .login-page {
+    padding: 24px 12px;
+  }
+  .login-card {
+    padding: 24px;
+  }
+  .login-title {
+    font-size: 1.5rem;
+  }
+}
