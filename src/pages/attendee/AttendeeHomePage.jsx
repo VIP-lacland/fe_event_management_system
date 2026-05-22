@@ -1,27 +1,36 @@
-import { useEffect, useMemo, useState } from 'react';
-import { EventService } from '../../services/EventService';
-import Header from '../../components/layouts/Header';
-import HomeContent from '../../components/layouts/HomeContent';
-import Footer from '../../components/layouts/Footer';
-import './HomePage.css';
+import { useEffect, useMemo, useState } from "react";
+import { EventService } from "../../services/EventService";
+import Header from "../../components/layouts/Header/AttendeeHeader";
+import HomeContent from "./home/HomeContent";
+import Footer from "../../components/layouts/Footer/AttendeeFooter";
+import "./AttendeeHomePage.css";
 
 const categoryData = [
-  { key: 'All', label: 'ALL', image: '/images/banner.png' },
-  { key: 'Music', label: 'MUSIC', image: '/images/music.png' },
-  { key: 'Sports', label: 'SPORTS', image: '/images/sports.png' },
-  { key: 'Food & Drink', label: 'FOOD & DRINK', image: '/images/food-drink.png' },
-  { key: 'Arts', label: 'ARTS', image: '/images/arts.png' },
-  { key: 'Education', label: 'EDUCATION', image: '/images/education.png' },
-  { key: 'Community', label: 'COMMUNITY', image: '/images/community.png' },
+  { key: "All", label: "ALL", image: "/images/banner.png" },
+  { key: "Music", label: "MUSIC", image: "/images/music.png" },
+  { key: "Sports", label: "SPORTS", image: "/images/sports.png" },
+  {
+    key: "Food & Drink",
+    label: "FOOD & DRINK",
+    image: "/images/food-drink.png",
+  },
+  { key: "Arts", label: "ARTS", image: "/images/arts.png" },
+  { key: "Education", label: "EDUCATION", image: "/images/education.png" },
+  { key: "Community", label: "COMMUNITY", image: "/images/community.png" },
 ];
 
 const categoryImages = {
-  Music: "linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(236, 72, 153, 0.36)), url('/images/music.png')",
-  Sports: "linear-gradient(135deg, rgba(14, 165, 233, 0.16), rgba(6, 182, 212, 0.34)), url('/images/sports.png')",
-  'Food & Drink': "linear-gradient(135deg, rgba(249, 115, 22, 0.16), rgba(251, 146, 60, 0.34)), url('/images/food-drink.png')",
+  Music:
+    "linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(236, 72, 153, 0.36)), url('/images/music.png')",
+  Sports:
+    "linear-gradient(135deg, rgba(14, 165, 233, 0.16), rgba(6, 182, 212, 0.34)), url('/images/sports.png')",
+  "Food & Drink":
+    "linear-gradient(135deg, rgba(249, 115, 22, 0.16), rgba(251, 146, 60, 0.34)), url('/images/food-drink.png')",
   Arts: "linear-gradient(135deg, rgba(250, 204, 21, 0.16), rgba(234, 179, 8, 0.34)), url('/images/arts.png')",
-  Education: "linear-gradient(135deg, rgba(20, 184, 166, 0.16), rgba(15, 118, 110, 0.34)), url('/images/education.png')",
-  Community: "linear-gradient(135deg, rgba(194, 65, 12, 0.16), rgba(234, 88, 12, 0.34)), url('/images/community.png')",
+  Education:
+    "linear-gradient(135deg, rgba(20, 184, 166, 0.16), rgba(15, 118, 110, 0.34)), url('/images/education.png')",
+  Community:
+    "linear-gradient(135deg, rgba(194, 65, 12, 0.16), rgba(234, 88, 12, 0.34)), url('/images/community.png')",
 };
 
 const EVENTS_PER_PAGE = 6;
@@ -29,32 +38,32 @@ const EVENTS_PER_PAGE = 6;
 const normalizeCity = (city) =>
   city
     .toLowerCase()
-    .replace(/tp\.?\s*|thành phố\s*/gi, '')
-    .replace(/[–—]/g, '-')
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
+    .replace(/tp\.?\s*|thành phố\s*/gi, "")
+    .replace(/[–—]/g, "-")
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
     .trim();
 
-const HomePage = () => {
+const AttendeeHomePage = () => {
   const [events, setEvents] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedFilter, setSelectedFilter] = useState('All');
-  const [selectedCity, setSelectedCity] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedFilter, setSelectedFilter] = useState("All");
+  const [selectedCity, setSelectedCity] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const loadEvents = async () => {
       setLoading(true);
-      setError('');
+      setError("");
 
       try {
         const { data } = await EventService.fetchEvents();
         setEvents(data || []);
       } catch (err) {
-        setError('Không thể tải dữ liệu sự kiện. Vui lòng thử lại sau.');
+        setError("Không thể tải dữ liệu sự kiện. Vui lòng thử lại sau.");
         console.error(err);
       } finally {
         setLoading(false);
@@ -69,7 +78,7 @@ const HomePage = () => {
 
     return events.filter((event) => {
       const eventText = [event.title, event.location, event.description]
-        .join(' ')
+        .join(" ")
         .toLowerCase();
 
       const matchesSearch = searchQuery
@@ -77,7 +86,7 @@ const HomePage = () => {
         : true;
 
       const matchesCategory =
-        selectedCategory === 'All' || event.category === selectedCategory;
+        selectedCategory === "All" || event.category === selectedCategory;
 
       const eventDate = new Date(event.event_date);
       const today = new Date();
@@ -85,10 +94,10 @@ const HomePage = () => {
       const isWeekend = [6, 0].includes(eventDate.getDay());
 
       const matchesFilter =
-        selectedFilter === 'All' ||
-        (selectedFilter === 'For you' && true) ||
-        (selectedFilter === 'Today' && isToday) ||
-        (selectedFilter === 'This weekend' && isWeekend);
+        selectedFilter === "All" ||
+        (selectedFilter === "For you" && true) ||
+        (selectedFilter === "Today" && isToday) ||
+        (selectedFilter === "This weekend" && isWeekend);
 
       const matchesCity = normalizedCity
         ? event.location.toLowerCase().includes(normalizedCity)
@@ -98,7 +107,10 @@ const HomePage = () => {
     });
   }, [events, searchQuery, selectedCategory, selectedFilter, selectedCity]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredEvents.length / EVENTS_PER_PAGE));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredEvents.length / EVENTS_PER_PAGE),
+  );
   const visiblePage = Math.min(currentPage, totalPages);
 
   const paginatedEvents = useMemo(() => {
@@ -126,10 +138,13 @@ const HomePage = () => {
           <span className="hero-kicker">Featured Event</span>
           <h1>A Night for Every Star</h1>
           <p>
-            Đêm Year End Party 2026 tại Đà Nẵng với âm nhạc, ánh sáng và không gian kết nối dành cho cộng đồng.
+            Đêm Year End Party 2026 tại Đà Nẵng với âm nhạc, ánh sáng và không
+            gian kết nối dành cho cộng đồng.
           </p>
           <div className="hero-actions">
-            <a href="#events" className="hero-primary-action">View Events</a>
+            <a href="#events" className="hero-primary-action">
+              View Events
+            </a>
             <div className="hero-meta">
               <span>23.01.2026</span>
               <span>Đà Nẵng Convention Center</span>
@@ -143,7 +158,7 @@ const HomePage = () => {
           <button
             key={category.key}
             type="button"
-            className={`category-card ${selectedCategory === category.key ? 'active' : ''}`}
+            className={`category-card ${selectedCategory === category.key ? "active" : ""}`}
             onClick={() => {
               setSelectedCategory(category.key);
               setCurrentPage(1);
@@ -180,4 +195,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default AttendeeHomePage;

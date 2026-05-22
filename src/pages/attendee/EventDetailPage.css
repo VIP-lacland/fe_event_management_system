@@ -237,3 +237,24 @@
     min-height: 280px;
   }
 }
+
+/* EventDetailPage.css - thêm style */
+.detail-register-btn.waitlist-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.detail-register-btn.waitlist-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+.detail-notice {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+.waitlist-count {
+  display: block;
+  font-size: 0.75rem;
+  color: #667eea;
+  margin-top: 4px;
+}
