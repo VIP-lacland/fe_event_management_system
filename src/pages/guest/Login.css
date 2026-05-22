@@ -1,0 +1,163 @@
+/* src/pages/Login.css */
+
+/* ─── Layout trang ─────────────────────────────────── */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafb;
+  padding: 48px 16px;
+}
+
+/* ─── Card chứa form ────────────────────────────────── */
+.login-card {
+  width: 100%;
+  max-width: 448px;
+  background-color: #ffffff;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ─── Tiêu đề ───────────────────────────────────────── */
+.login-header {
+  margin-bottom: 8px;
+}
+
+.login-title {
+  text-align: center;
+  font-size: 1.875rem;   /* 30px */
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+/* ─── Form ──────────────────────────────────────────── */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 32px;
+}
+
+/* ─── Thông báo lỗi từ server ───────────────────────── */
+.alert {
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.alert--error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+}
+
+/* ─── Nhóm trường input ─────────────────────────────── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  font-size: 0.875rem;
+  color: #111827;
+  box-sizing: border-box;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.form-input--error {
+  border-color: #fca5a5;
+}
+
+.form-input--error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.form-error-message {
+  margin: 2px 0 0;
+  font-size: 0.8125rem;
+  color: #dc2626;
+}
+
+/* ─── Nút submit ────────────────────────────────────── */
+.login-submit-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #4f46e5;
+  cursor: pointer;
+  transition: background-color 0.15s, opacity 0.15s;
+}
+
+.login-submit-btn:hover:not(:disabled) {
+  background-color: #4338ca;
+}
+
+.login-submit-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
+}
+
+.login-submit-btn--loading,
+.login-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Dòng đăng ký ──────────────────────────────────── */
+.login-register-prompt {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.login-register-link {
+  font-weight: 500;
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.login-register-link:hover {
+  color: #4338ca;
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .login-page {
+    padding: 24px 12px;
+  }
+  .login-card {
+    padding: 24px;
+  }
+  .login-title {
+    font-size: 1.5rem;
+  }
+}

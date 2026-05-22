@@ -8,13 +8,19 @@ import { getOrganizerRoutes } from "./OrganizerRoutes";
 import { getAttendeeRoutes } from "./AttendeeRoutes";
 import ProtectedRoute from "./ProtectedRoute";
 import EventDetailPage from "../pages/attendee/EventDetailPage";
-// import EventRegistrationPage from "../pages/attendee/EventRegistrationPage";
-
+import EventRegistrationPage from "../pages/attendee/EventRegistrationPage";
+import ProfilePage from "../pages/attendee/ProfilePage";
+import MyTicketsPage from "../pages/attendee/MyTicketsPage";
 
 const publicRoutes = [
   {
     path: "/",
     element: <AttendeeHomePage />,
+    handle: { public: true },
+  },
+  {
+    path: "/event/:eventId",
+    element: <EventDetailPage />,
     handle: { public: true },
   },
   {
@@ -25,11 +31,6 @@ const publicRoutes = [
   {
     path: "/register",
     element: <LoginPage />,
-    handle: { public: true },
-  },
-  {
-    path: "/event/:eventId",
-    element: <EventDetailPage />,
     handle: { public: true },
   },
 ];
@@ -45,10 +46,10 @@ const router = createBrowserRouter([
     ),
     handle: { requiresAuth: true, allowedRoles: ["organizer"] },
     children: [
-      // {
-      //   index: true,
-      //   element: <Navigate to="home" replace />,
-      // },
+      {
+        index: true,
+        element: <Navigate to="home" replace />,
+      },
       ...getOrganizerRoutes(),
     ],
   },
@@ -61,7 +62,7 @@ const router = createBrowserRouter([
     ),
     handle: { requiresAuth: true, allowedRoles: ["attendee"] },
     children: [
-        ...getAttendeeRoutes()
+      ...getAttendeeRoutes()
     ]
   },
   {
