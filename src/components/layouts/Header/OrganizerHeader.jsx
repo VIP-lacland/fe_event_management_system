@@ -28,6 +28,7 @@ export default function OrganizerHeader() {
           <nav className="header-nav">
             {navItems.map((item) => (
               <NavLink
+                key={item.path}
                 to={item.path}
                 end
                 className={({ isActive }) =>
