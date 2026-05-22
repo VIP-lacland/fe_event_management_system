@@ -100,7 +100,7 @@ export default function EditEventPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isReadOnly) return;
+    if (originalStatus === 'cancelled') return;
 
     setFormError('');
     setSuccess(false);
@@ -274,7 +274,7 @@ export default function EditEventPage() {
                 {isReadOnly ? 'Quay lại' : 'Huỷ bỏ'}
               </button>
 
-              {!isReadOnly && (
+              {originalStatus !== 'cancelled' && (
                 <button
                   type="submit"
                   className="btn-submit"

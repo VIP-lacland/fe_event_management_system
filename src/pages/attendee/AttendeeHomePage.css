@@ -398,3 +398,59 @@
 @media (max-width: 640px) {
   .footer-grid { grid-template-columns: 1fr; text-align: left; }
 }
+
+/* --- GIAO DIỆN NÚT TÀI KHOẢN --- */
+.user-profile-widget {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: rgba(255, 255, 255, 0.08); /* Nền kính mờ */
+  padding: 0.25rem 0.4rem 0.25rem 1rem;
+  border-radius: 999px; /* Bo góc tròn xoe */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap; /* Khóa chết không cho rớt dòng */
+}
+
+.user-greeting {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.user-avatar, .user-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Phòng trường hợp ko có ảnh Google thì lấy chữ cái đầu */
+.user-avatar-placeholder {
+  background: linear-gradient(135deg, #ff7a00, #ff9a2b);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ff4d4f; /* Chuyển đỏ báo hiệu nút thoát */
+  transform: scale(1.1);
+}
