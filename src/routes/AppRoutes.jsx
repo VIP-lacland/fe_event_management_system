@@ -3,10 +3,12 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import OrganizerLayout from "../components/layouts/MainLayouts/OrganizerLayout";
 import HomePage from "../pages/attendee/HomePage";
 import LoginPage from "../pages/guest/LoginPage";
+import RegisterPage from "../pages/guest/RegisterPage";
 // import CreateEventForm from "../pages/organizer/event/CreateEventForm";
 // import { EditEventPage } from "../pages/EditEventPage";
 import { getOrganizerRoutes } from "./OrganizerRoutes";
 import ProtectedRoute from "./ProtectedRoute";
+
 
 const publicRoutes = [
   {
@@ -21,7 +23,7 @@ const publicRoutes = [
   },
   {
     path: "/register",
-    element: <LoginPage />,
+    element: <RegisterPage />,
     handle: { public: true },
   },
 ];

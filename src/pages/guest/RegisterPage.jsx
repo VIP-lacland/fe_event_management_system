@@ -1,12 +1,11 @@
 // src/pages/guest/RegisterPage.jsx
 import React, { useState } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { Register, resendVerification } from '../../services/AuthService';
+import { useNavigate, Link } from 'react-router-dom';
+import { Register } from '../../services/AuthService'; // ✅ Chỉ import Register
 import './RegisterPage.css';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -20,7 +19,6 @@ const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [apiError, setApiError] = useState('');
-  const [showVerificationHint, setShowVerificationHint] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,7 +66,6 @@ const RegisterPage = () => {
     e.preventDefault();
     setApiError('');
     setSuccessMessage('');
-    setShowVerificationHint(false);
 
     if (!validateForm()) return;
 
@@ -86,8 +83,8 @@ const RegisterPage = () => {
       const response = await Register(registerData);
 
       if (response.success) {
-        setSuccessMessage(response.message);
-        setShowVerificationHint(true);
+        // ✅ Cập nhật message mới - không còn verify email
+        setSuccessMessage('Registration successful! Welcome email has been sent to your inbox.');
         
         // Clear form
         setFormData({
@@ -98,12 +95,12 @@ const RegisterPage = () => {
           role: 'attendee'
         });
 
-        // Tự động chuyển đến login sau 5 giây
+        // ✅ Redirect đến login sau 3 giây - user có thể login NGAY
         setTimeout(() => {
           navigate('/login', { 
-            state: { message: 'Please verify your email before logging in' } 
+            state: { message: 'Registration successful! You can now login.' } 
           });
-        }, 5000);
+        }, 3000);
       }
     } catch (error) {
       console.error('Registration error:', error);
@@ -125,23 +122,6 @@ const RegisterPage = () => {
     }
   };
 
-  const handleResendVerification = async () => {
-    if (!formData.email) {
-      setApiError('Please enter your email first');
-      return;
-    }
-
-    try {
-      const response = await resendVerification(formData.email);
-      if (response.success) {
-        setSuccessMessage(response.message);
-        setApiError('');
-      }
-    } catch (error) {
-      setApiError(error.response?.data?.message || 'Failed to resend verification email');
-    }
-  };
-
   return (
     <div className="register-page">
       <div className="register-container">
@@ -154,18 +134,9 @@ const RegisterPage = () => {
         {successMessage && (
           <div className="alert alert-success">
             {successMessage}
-            {showVerificationHint && (
-              <div className="verification-hint">
-                <p>📧 Check your inbox (and spam folder) for the verification email.</p>
-                <button 
-                  type="button" 
-                  className="btn-resend"
-                  onClick={handleResendVerification}
-                >
-                  Resend Verification Email
-                </button>
-              </div>
-            )}
+            <p style={{ marginTop: '8px', fontSize: '0.9rem' }}>
+              🔁 Redirecting to login page...
+            </p>
           </div>
         )}
 
