@@ -1,9 +1,9 @@
 // src/pages/LoginPage.jsx
-import { useState } from "react";
-import { useNavigate, Link} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
 import { Login } from "../../services/AuthService";
 import "./Login.css";
+import { useState, useEffect } from "react";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -14,6 +14,28 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState("");
+
+  useEffect(() => {
+    // Đọc URL xem có chứa token hay báo lỗi không
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenParams = urlParams.get("token");
+    const userParams = urlParams.get("user");
+    const errorParams = urlParams.get("error");
+
+    if (errorParams) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setServerError("Đăng nhập Google thất bại!");
+    } else if (tokenParams && userParams) {
+      // Đăng nhập thành công, lưu vào store
+      const userData = JSON.parse(decodeURIComponent(userParams));
+      login(userData, tokenParams);
+
+      // Chuyển hướng theo role
+      const redirectPath =
+        userData.role === "attendee" ? "/attendee" : "/organizer/home";
+      navigate(redirectPath, { replace: true });
+    }
+  }, [navigate, login]);
 
   // const from = location.state?.from?.pathname || "/dashboard";
 
@@ -38,15 +60,11 @@ const LoginPage = () => {
       localStorage.setItem("user", JSON.stringify(responseData.user));
 
       const redirectPath =
-        responseData.user.role === "attendee"
-          ? "/attendee"
-          : "/organizer/home";
+        responseData.user.role === "attendee" ? "/attendee" : "/organizer/home";
 
       setTimeout(() => {
         navigate(redirectPath, { replace: true });
       }, 100);
-
-      
     } catch (err) {
       if (err.response?.status === 422) {
         setErrors(err.response.data.errors || {});
@@ -64,10 +82,23 @@ const LoginPage = () => {
     <div className="login-layout">
       {/* 70% Image Side */}
       <div className="login-image-side">
-        <img src="/login-banner.png" alt="Event Banner" className="login-banner" />
+        <img
+          src="/login-banner.png"
+          alt="Event Banner"
+          className="login-banner"
+        />
         <div className="login-image-overlay"></div>
         <Link to="/" className="back-to-home">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
@@ -80,7 +111,9 @@ const LoginPage = () => {
         <div className="login-card">
           <div className="login-header">
             <h2 className="login-title">Đăng nhập</h2>
-            <p className="login-subtitle">Chào mừng bạn quay trở lại Eventify</p>
+            <p className="login-subtitle">
+              Chào mừng bạn quay trở lại Eventify
+            </p>
           </div>
 
           <form className="login-form" onSubmit={handleSubmit}>
@@ -138,6 +171,18 @@ const LoginPage = () => {
               className={`login-submit-btn ${loading ? "login-submit-btn--loading" : ""}`}
             >
               {loading ? "Đang đăng nhập..." : "Đăng nhập"}
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                (window.location.href =
+                  "http://localhost:8000/api/auth/google/redirect")
+              }
+              className="login-submit-btn"
+              style={{ background: "#db4437", marginTop: "10px" }}
+            >
+              Đăng nhập bằng Google
             </button>
 
             <p className="login-register-prompt">
