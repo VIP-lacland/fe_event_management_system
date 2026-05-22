@@ -3,11 +3,10 @@ import { useState } from "react";
 import { useNavigate, Link} from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
 import { Login } from "../../services/AuthService";
-import "./Login.css";
+import "./LoginPage.css";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  // const location = useLocation();
   const login = useAuthStore((state) => state.login);
 
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -15,7 +14,6 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState("");
 
-  // const from = location.state?.from?.pathname || "/dashboard";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,8 +37,8 @@ const LoginPage = () => {
 
       const redirectPath =
         responseData.user.role === "attendee"
-          ? "/attendee"
-          : "/organizer/home";
+          ? "/attendee/home"
+          : "/organizer/dashboard";
 
       setTimeout(() => {
         navigate(redirectPath, { replace: true });

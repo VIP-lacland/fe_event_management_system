@@ -1,32 +1,35 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { EventService } from '../../services/EventService';
-import { useAuthStore } from '../../store/authStore';
-import './EventRegistrationPage.css';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { EventService } from "../../services/EventService";
+import { useAuthStore } from "../../store/authStore";
+import "./EventRegistrationPage.css";
 
 const EventRegistrationPage = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
-  const user = useAuthStore(state => state.user);
-  
+  const user = useAuthStore((state) => state.user);
+
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-  
+
   // Fake payment state
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiry, setExpiry] = useState('');
-  const [cvc, setCvc] = useState('');
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [cvc, setCvc] = useState("");
+
+  const [registrationStatus, setRegistrationStatus] = useState(null); // 'confirmed' | 'pending' | 'waitlist'
+  const [waitlistPosition, setWaitlistPosition] = useState(null);
 
   useEffect(() => {
     const loadEvent = async () => {
       try {
         const { data } = await EventService.fetchEventById(eventId);
         setEvent(data);
-      } catch {
-        setError('Failed to load event information.');
+      } catch (err) {
+        setError("Failed to load event information.");
       } finally {
         setLoading(false);
       }
@@ -38,75 +41,136 @@ const EventRegistrationPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Fake validation for paid events
     if (event?.price > 0) {
       if (!cardNumber || !expiry || !cvc) {
-        setError('Please fill in all payment details to checkout.');
+        setError("Please fill in all payment details to checkout.");
         return;
       }
     }
 
     setSubmitting(true);
-    setError('');
-    
+    setError("");
+
     try {
       // Simulate processing time
       if (event?.price > 0) {
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        await new Promise((resolve) => setTimeout(resolve, 1500));
       }
 
-      await EventService.registerEvent(eventId);
-      
+      const result = await EventService.registerEvent(eventId);
+
+      setRegistrationStatus(result.status);
+      setWaitlistPosition(result.waitlist_position);
       setSuccess(true);
-      
+
       // Wait 4 seconds then redirect
       setTimeout(() => {
         navigate(`/my-tickets`);
       }, 4000);
-      
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again later.');
+      if (err.response?.status === 409) {
+        const existing = err.response.data.registration;
+        setRegistrationStatus(existing.status);
+        setWaitlistPosition(existing.position);
+        setSuccess(true);
+        setTimeout(() => navigate(`/my-tickets`), 3000);
+        return;
+      }
+      setError(err.response?.data?.message || "Registration failed.");
     } finally {
       setSubmitting(false);
     }
   };
+  const getSuccessMessage = () => {
+    switch (registrationStatus) {
+      case "waitlist":
+        return {
+          icon: "🕐",
+          title: "Added to Waitlist!",
+          msg: `You're #${waitlistPosition} on the waitlist. We'll notify you if a spot opens.`,
+          redirect: "Redirecting to your tickets...",
+        };
+      case "pending":
+        return {
+          icon: "⏳",
+          title: "Pending Approval",
+          msg: "Your registration is waiting for organizer's approval.",
+          redirect: "Redirecting to your tickets...",
+        };
+      case "confirmed":
+      default:
+        return {
+          icon: "✅",
+          title:
+            event?.price > 0
+              ? "Payment Successful!"
+              : "Registration Confirmed!",
+          msg:
+            event?.price > 0
+              ? "Your registration is confirmed. See you at the event!"
+              : "Please wait for organizer's approval.",
+          redirect: "Redirecting to your tickets...",
+        };
+    }
+  };
+  const successInfo = getSuccessMessage();
 
   if (loading) {
-    return <div className="registration-page loading">Loading event information...</div>;
+    return (
+      <div className="registration-page loading">
+        Loading event information...
+      </div>
+    );
   }
 
   if (error && !event) {
     return <div className="registration-page error">{error}</div>;
   }
 
-  const isFree = !event.price || event.price === 0 || event.price === '0.00';
+  const isFree = !event.price || event.price === 0 || event.price === "0.00";
 
   return (
     <div className="registration-page">
       <div className="registration-container">
-        <Link to={`/event/${eventId}`} className="back-link">← Back to Event</Link>
-        
+        <Link to={`/event/${eventId}`} className="back-link">
+          ← Back to Event
+        </Link>
+
         <div className="registration-card">
           <div className="registration-header">
-            <h2>{isFree ? 'Register for Event' : 'Checkout & Register'}</h2>
+            <h2>{isFree ? "Register for Event" : "Checkout & Register"}</h2>
             <p className="event-title">{event.title}</p>
-            <p className="event-price">Total: {isFree ? 'Free' : `$${parseFloat(event.price).toFixed(2)}`}</p>
+            <p className="event-price">
+              Total:{" "}
+              {isFree ? "Free" : `$${parseFloat(event.price).toFixed(2)}`}
+            </p>
           </div>
 
           <form className="registration-form" onSubmit={handleSubmit}>
             {error && <div className="form-error">{error}</div>}
-            
+
             <div className="form-section">
               <h3>Attendee Information</h3>
               <div className="form-group">
                 <label>Full Name</label>
-                <input type="text" value={user?.name || ''} readOnly className="read-only-input" />
+                <input
+                  type="text"
+                  value={user?.name || ""}
+                  readOnly
+                  className="read-only-input"
+                />
               </div>
-              
+
               <div className="form-group">
                 <label>Email Address</label>
-                <input type="email" value={user?.email || ''} readOnly className="read-only-input" />
+                <input
+                  type="email"
+                  value={user?.email || ""}
+                  readOnly
+                  className="read-only-input"
+                />
               </div>
             </div>
 
@@ -115,33 +179,33 @@ const EventRegistrationPage = () => {
                 <h3>Payment Details</h3>
                 <div className="form-group">
                   <label>Card Number</label>
-                  <input 
-                    type="text" 
-                    placeholder="0000 0000 0000 0000" 
+                  <input
+                    type="text"
+                    placeholder="0000 0000 0000 0000"
                     value={cardNumber}
                     onChange={(e) => setCardNumber(e.target.value)}
-                    required 
+                    required
                   />
                 </div>
                 <div className="form-row">
                   <div className="form-group">
                     <label>Expiry (MM/YY)</label>
-                    <input 
-                      type="text" 
-                      placeholder="MM/YY" 
+                    <input
+                      type="text"
+                      placeholder="MM/YY"
                       value={expiry}
                       onChange={(e) => setExpiry(e.target.value)}
-                      required 
+                      required
                     />
                   </div>
                   <div className="form-group">
                     <label>CVC</label>
-                    <input 
-                      type="text" 
-                      placeholder="123" 
+                    <input
+                      type="text"
+                      placeholder="123"
                       value={cvc}
                       onChange={(e) => setCvc(e.target.value)}
-                      required 
+                      required
                     />
                   </div>
                 </div>
@@ -153,7 +217,11 @@ const EventRegistrationPage = () => {
             </div>
 
             <button type="submit" className="confirm-btn" disabled={submitting}>
-              {submitting ? 'Processing...' : (isFree ? 'Confirm Registration' : 'Pay & Register')}
+              {submitting
+                ? "Processing..."
+                : isFree
+                  ? "Confirm Registration"
+                  : "Pay & Register"}
             </button>
           </form>
         </div>
@@ -163,12 +231,15 @@ const EventRegistrationPage = () => {
       {success && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <div className="popup-icon">✅</div>
-            <h3>{isFree ? 'Registration Complete!' : 'Payment Successful!'}</h3>
-            <p className="popup-msg">
-              Your registration is complete. Please wait for the organizer's approval.
-            </p>
-            <p className="popup-redirect">Redirecting to your tickets in a few seconds...</p>
+            <div className="popup-icon">{successInfo.icon}</div>
+            <h3>{successInfo.title}</h3>
+            <p className="popup-msg">{successInfo.msg}</p>
+            {waitlistPosition && (
+              <div className="waitlist-position-badge">
+                Position #{waitlistPosition}
+              </div>
+            )}
+            <p className="popup-redirect">{successInfo.redirect}</p>
           </div>
         </div>
       )}

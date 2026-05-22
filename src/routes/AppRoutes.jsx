@@ -1,11 +1,12 @@
 // src/routes/AppRoutes.jsx
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import OrganizerLayout from "../components/layouts/MainLayouts/OrganizerLayout";
+import AttendeeLayout from "../components/layouts/MainLayouts/AttendeeLayout";
 import HomePage from "../pages/attendee/HomePage";
+import AttendeeHomePage from "../pages/attendee/AttendeeHomePage";
 import LoginPage from "../pages/guest/LoginPage";
-// import CreateEventForm from "../pages/organizer/event/CreateEventForm";
-// import { EditEventPage } from "../pages/EditEventPage";
 import { getOrganizerRoutes } from "./OrganizerRoutes";
+import { getAttendeeRoutes } from "./AttendeeRoutes";
 import ProtectedRoute from "./ProtectedRoute";
 import EventDetailPage from "../pages/attendee/EventDetailPage";
 import EventRegistrationPage from "../pages/attendee/EventRegistrationPage";
@@ -89,6 +90,18 @@ const router = createBrowserRouter([
       },
       ...getOrganizerRoutes(),
     ],
+  },
+  {
+    path: "/attendee",
+    element: (
+      <ProtectedRoute allowedRoles={["attendee"]}>
+        <AttendeeLayout />
+      </ProtectedRoute>
+    ),
+    handle: { requiresAuth: true, allowedRoles: ["attendee"] },
+    children: [
+      ...getAttendeeRoutes()
+    ]
   },
   {
     path: "*",

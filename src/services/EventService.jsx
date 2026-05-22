@@ -40,13 +40,20 @@ export const EventService = {
   },
 
   updateEventStatus: async (id, status) => {
-    const response = await api.patch(`/organizer/events/${id}/status`, { status });
+    const response = await api.patch(`/organizer/events/${id}/status`, {
+      status,
+    });
     return response.data;
   },
 
-  registerEvent: async (id) => {
-    const response = await api.post(`/events/${id}/register`);
-    return response.data;
+  registerEvent: async (eventId, formData = {}) => {
+    const response = await api.post(`/events/${eventId}/register`, formData);
+    return {
+      data: response.data,
+      status: response.data.status,
+      waitlistPosition: response.data.waitlist_position,
+      message: response.data.message,
+    };
   },
 
   getMyTickets: async () => {
@@ -56,18 +63,26 @@ export const EventService = {
 
   cancelTicket: async (eventId) => {
     const response = await api.delete(`/attendee/tickets/${eventId}`);
-    return response.data;
+    return {
+      data: response.data,
+      autoPromoted: response.data.auto_promoted, // true nếu có người được promote
+    };
   },
-
+  
   getRegistrations: async (eventId) => {
-    const response = await api.get(`/organizer/events/${eventId}/registrations`);
+    const response = await api.get(
+      `/organizer/events/${eventId}/registrations`,
+    );
     return response.data;
   },
 
   updateRegistrationStatus: async (eventId, registrationId, status) => {
-    const response = await api.patch(`/organizer/events/${eventId}/registrations/${registrationId}/status`, { status });
+    const response = await api.patch(
+      `/organizer/events/${eventId}/registrations/${registrationId}/status`,
+      { status },
+    );
     return response.data;
-  }
+  },
 };
 
 export const GetEvents = EventService.getEvents;
@@ -80,3 +95,4 @@ export const GetMyTickets = EventService.getMyTickets;
 export const CancelTicket = EventService.cancelTicket;
 export const GetRegistrations = EventService.getRegistrations;
 export const UpdateRegistrationStatus = EventService.updateRegistrationStatus;
+export const PromoteFromWaitlist = EventService.promoteFromWaitlist;

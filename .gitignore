@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .git_disabled/
+.env
 
 # Editor directories and files
 .vscode/*
