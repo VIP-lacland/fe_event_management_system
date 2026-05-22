@@ -7,13 +7,9 @@ export default function OrganizerHeader() {
   const { user, logout } = useAuthStore();
 
   const navItems = [
-<<<<<<< HEAD
     { path: "/organizer/home", label: "Home" },
     { path: "/organizer/dashboard", label: "Dashboard" },
-=======
-    { path: "/organizer/dashboard", label: "Dashboard" },
     { path: "/organizer/events", label: "Events" },
->>>>>>> 8c9c6d99ea761abd057fd9ddb4a676760adb1834
     { path: "/organizer/create", label: "Create Event" },
   ];
 
