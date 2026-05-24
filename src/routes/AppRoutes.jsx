@@ -4,6 +4,7 @@ import OrganizerLayout from "../components/layouts/MainLayouts/OrganizerLayout";
 import AttendeeLayout from "../components/layouts/MainLayouts/AttendeeLayout";
 import AttendeeHomePage from "../pages/attendee/AttendeeHomePage";
 import LoginPage from "../pages/guest/LoginPage";
+import RegisterPage from "../pages/guest/RegisterPage";
 import { getOrganizerRoutes } from "./OrganizerRoutes";
 import { getAttendeeRoutes } from "./AttendeeRoutes";
 import ProtectedRoute from "./ProtectedRoute";
@@ -11,6 +12,7 @@ import EventDetailPage from "../pages/attendee/EventDetailPage";
 import EventRegistrationPage from "../pages/attendee/EventRegistrationPage";
 import ProfilePage from "../pages/attendee/ProfilePage";
 import MyTicketsPage from "../pages/attendee/MyTicketsPage";
+
 
 const publicRoutes = [
   {
@@ -30,7 +32,7 @@ const publicRoutes = [
   },
   {
     path: "/register",
-    element: <LoginPage />,
+    element: <RegisterPage />,
     handle: { public: true },
   },
 ];
