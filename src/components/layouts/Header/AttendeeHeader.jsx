@@ -39,24 +39,14 @@ const Header = () => {
       </Link>
       <nav className="homepage-nav" aria-label="Main navigation">
         <div className="homepage-nav-group">
+          <button className="homepage-button" type="button" onClick={() => navigate("/")}>
+            Home
+          </button>
           <button className="homepage-button" type="button">
             About Us
           </button>
           <button className="homepage-button" type="button">
             Contact
-          </button>
-          <button className="homepage-button" type="button">
-            Find event
-          </button>
-          <button className="homepage-button" type="button">
-            Help center
-          </button>
-          <button
-            className="homepage-button"
-            type="button"
-            onClick={() => navigate("/attendee/my-tickets")}
-          >
-            Find my tickets
           </button>
         </div>
 
@@ -209,7 +199,7 @@ const Header = () => {
                 <div
                   onClick={() => {
                     setDropdownOpen(false);
-                    navigate("/my-tickets");
+                    navigate("/attendee/my-tickets");
                   }}
                   style={{
                     display: "block",
