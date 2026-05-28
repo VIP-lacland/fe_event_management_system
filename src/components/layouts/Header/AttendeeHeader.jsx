@@ -177,7 +177,7 @@ const Header = () => {
                 <div
                   onClick={() => {
                     setDropdownOpen(false);
-                    navigate("/profile");
+                    navigate("/attendee/profile");
                   }}
                   style={{
                     display: "block",

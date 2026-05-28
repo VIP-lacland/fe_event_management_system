@@ -1,5 +1,5 @@
 // src/routes/OrganizerRoutes.jsx
-import OrganizerHomePage from "../pages/organizer/home/OrganizerHome";
+// import OrganizerHomePage from "../pages/organizer/home/OrganizerHome";
 import Dashboard from "../pages/organizer/dashboard/Dashboard";
 import CreateEventForm from "../pages/organizer/event/CreateEventForm";
 import EditEventPage from "../pages/organizer/event/EditEventPage";
@@ -9,10 +9,6 @@ import PendingRegistrationsPage from "../pages/organizer/attendeeManagement/Pend
 
 export function getOrganizerRoutes() {
   return [
-    {
-      path: "home",
-      Component: OrganizerHomePage,
-    },
     {
       path: "dashboard",
       Component: Dashboard,

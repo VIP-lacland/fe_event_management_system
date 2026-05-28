@@ -1,7 +1,7 @@
 // src/components/layouts/MainLayouts/OrganizerLayout.jsx
 import { Outlet } from "react-router-dom";
 import AttendeeHeader from "../../layouts/Header/AttendeeHeader";
-
+import "./AttendeeLayout.css"
 
 export default function AttendeeLayout() {
   return (

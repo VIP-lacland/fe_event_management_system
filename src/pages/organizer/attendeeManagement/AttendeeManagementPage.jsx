@@ -68,7 +68,7 @@ const AttendeeManagementPage = () => {
     <div className="attendee-management-container" style={{ padding: "2rem" }}>
       <div className="attendee-management-header">
         <div>
-          <Link to="/organizer" className="back-link">
+          <Link to="/organizer/dashboard" className="back-link">
             ← Back to Dashboard
           </Link>
           <h1>Attendee Management</h1>
