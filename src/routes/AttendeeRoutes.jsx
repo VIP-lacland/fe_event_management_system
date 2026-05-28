@@ -21,6 +21,10 @@ export function getAttendeeRoutes() {
         {
             path: "my-tickets",
             Component: MyTicketsPage,
+        },
+        {
+            path: "profile",
+            Component: ProfilePage,
         }
     ]
 }

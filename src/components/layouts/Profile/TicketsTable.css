@@ -1,0 +1,246 @@
+/* TicketsTable.css - ORANGE THEME */
+
+.tickets-table-wrapper {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Status Filters - CAM ACTIVE */
+.status-filters {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+  background: #fafbfc;
+}
+
+.filter-btn {
+  padding: 0.4rem 1rem;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  color: #4a5568;
+}
+
+.filter-btn:hover:not(.active) {
+  border-color: #ff6b35;
+  color: #ff6b35;
+  background: #fff7ed;
+}
+
+/* ACTIVE FILTER - CAM */
+.filter-btn.active {
+  background: linear-gradient(135deg, #ff6b35 0%, #ff9a5c 100%);
+  color: white;
+  border-color: #ff6b35;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.25);
+}
+
+/* Table */
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.tickets-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.tickets-table th {
+  background: #f8fafc;
+  padding: 0.875rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #4a5568;
+  border-bottom: 2px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.tickets-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #edf2f7;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.tickets-table tbody tr:hover {
+  background: #fff7ed; /* Cam nhạt khi hover */
+}
+
+/* Status Badges - GIỮ NGUYÊN (xanh/vàng/đỏ theo status) */
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-confirmed { background: #d1fae5; color: #059669; }
+.status-pending  { background: #fef3c7; color: #d97706; }
+.status-cancelled{ background: #fee2e2; color: #dc2626; }
+
+/* Action Buttons - CAM CHO CANCEL */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.btn-view {
+  padding: 0.4rem 0.875rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #4a5568;
+}
+
+.btn-view:hover {
+  border-color: #ff6b35;
+  color: #ff6b35;
+  background: #fff7ed;
+}
+
+/* CANCEL BUTTON - CAM ĐỎ MATCH THEME */
+.btn-cancel {
+  padding: 0.4rem 0.875rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff9a5c 100%);
+  color: white;
+  transition: all 0.2s;
+  box-shadow: 0 2px 6px rgba(255, 107, 53, 0.2);
+}
+
+.btn-cancel:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.35);
+}
+
+.btn-cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Empty State - CAM BUTTON */
+.tickets-empty {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #718096;
+}
+
+.btn-discover {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff9a5c 100%);
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+}
+
+.btn-discover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
+/* Pagination - CAM ACTIVE */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  background: #fafbfc;
+}
+
+.page-btn, .page-num {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  min-width: 36px;
+  transition: all 0.2s;
+  color: #4a5568;
+}
+
+.page-btn:hover:not(:disabled),
+.page-num:hover:not(.active) {
+  border-color: #ff6b35;
+  color: #ff6b35;
+  background: #fff7ed;
+}
+
+.page-num.active {
+  background: linear-gradient(135deg, #ff6b35 0%, #ff9a5c 100%);
+  color: white;
+  border-color: #ff6b35;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.25);
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+  
+  .status-filters {
+    padding: 0.75rem 1rem;
+  }
+  
+  .filter-btn {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  
+  .tickets-table td,
+  .tickets-table th {
+    padding: 0.75rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .btn-view, .btn-cancel {
+    text-align: center;
+    padding: 0.5rem;
+  }
+}
+
+.table-loading {
+  text-align: center;
+  padding: 3rem;
+  color: #718096;
+}

@@ -9,9 +9,6 @@ import { getOrganizerRoutes } from "./OrganizerRoutes";
 import { getAttendeeRoutes } from "./AttendeeRoutes";
 import ProtectedRoute from "./ProtectedRoute";
 import EventDetailPage from "../pages/attendee/EventDetailPage";
-import EventRegistrationPage from "../pages/attendee/EventRegistrationPage";
-import ProfilePage from "../pages/attendee/ProfilePage";
-import MyTicketsPage from "../pages/attendee/MyTicketsPage";
 
 
 const publicRoutes = [
