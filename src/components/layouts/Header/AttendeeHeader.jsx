@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../store/authStore";
+import NotificationBell from "../../ui/NotificationBell/NotificationBell";
 
 // Header layout component for the attendee homepage
 // Bao gồm logo và điều hướng chính của ứng dụng
@@ -61,11 +62,13 @@ const Header = () => {
         </div>
 
         {isAuthenticated && user ? (
-          <div
-            className="user-dropdown-container"
-            ref={dropdownRef}
-            style={{ position: "relative" }}
-          >
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <NotificationBell />
+            <div
+              className="user-dropdown-container"
+              ref={dropdownRef}
+              style={{ position: "relative" }}
+            >
             <button
               className="homepage-action"
               onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -255,6 +258,7 @@ const Header = () => {
                 </button>
               </div>
             )}
+          </div>
           </div>
         ) : (
           <Link to="/login" className="homepage-action primary">
