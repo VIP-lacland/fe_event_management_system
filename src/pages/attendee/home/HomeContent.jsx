@@ -1,5 +1,6 @@
 import CityDropdown from "../../../components/ui/CityDropdown";
 import SearchBar from "../../../components/ui/SearchBar";
+import "./HomeContent.css";
 import { useNavigate, Link } from "react-router-dom";
 
 const filters = ["All", "For you", "Today", "This weekend"];
@@ -20,6 +21,9 @@ const HomeContent = ({
   totalPages,
   eventsPerPage,
   onPageChange,
+
+  filterDate = '',
+  onDateChange = () => {},
 }) => {
   const navigate = useNavigate();
   const firstEventNumber =
@@ -48,6 +52,26 @@ const HomeContent = ({
               {filter}
             </button>
           ))}
+          <div className="date-filter-wrapper">
+            <input
+              type="date"
+              value={filterDate}
+              onChange={(e) => onDateChange(e.target.value)}
+              className="date-filter-input"
+              min={new Date().toISOString().split('T')[0]}
+              title="Chọn ngày cụ thể"
+            />
+            {filterDate && (
+              <button
+                type="button"
+                className="date-filter-clear"
+                onClick={() => onDateChange('')}
+                title="Xóa ngày"
+              >
+                ×
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
