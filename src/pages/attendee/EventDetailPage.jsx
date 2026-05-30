@@ -17,7 +17,15 @@ const EventDetailPage = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const user = useAuthStore((state) => state.user);
   const [event, setEvent] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [reviewMeta, setReviewMeta] = useState({ total: 0, average_rating: 0 });
+  const [reviewLoading, setReviewLoading] = useState(true);
+  const [reviewError, setReviewError] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewForm, setReviewForm] = useState({ rating: 5, comment: "" });
+  const [reviewMessage, setReviewMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -42,6 +50,27 @@ const EventDetailPage = () => {
     }
   }, [eventId]);
 
+  useEffect(() => {
+    const loadReviews = async () => {
+      if (!eventId) return;
+
+      setReviewLoading(true);
+      setReviewError("");
+      try {
+        const res = await EventService.getEventReviews(eventId);
+        setReviews(res.data || []);
+        setReviewMeta(res.meta || { total: 0, average_rating: 0 });
+      } catch (err) {
+        console.error(err);
+        setReviewError("Could not load reviews for this event.");
+      } finally {
+        setReviewLoading(false);
+      }
+    };
+
+    loadReviews();
+  }, [eventId]);
+
   const handleRegisterClick = () => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -57,6 +86,55 @@ const EventDetailPage = () => {
   const isFull = capacity > 0 && registered >= capacity;
   const waitlistCount = event?.waitlist_count ?? 0;
   const logoSrc = categoryLogos[event?.category] ?? "/images/banner.png";
+  const isEventEnded = event ? new Date(event.event_date) <= new Date() : false;
+  const hasReviewed = reviews.some((r) => r.attendee_id === user?.id);
+
+  const canLeaveReview =
+    isAuthenticated &&
+    user?.role === "attendee" &&
+    isEventEnded &&
+    !hasReviewed;
+
+  const handleReviewInputChange = (field, value) => {
+    setReviewForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    setReviewMessage("");
+
+    if (!reviewForm.comment.trim()) {
+      setReviewMessage("Please enter your experience before submitting.");
+      return;
+    }
+
+    setSubmittingReview(true);
+    try {
+      const payload = {
+        rating: Number(reviewForm.rating),
+        comment: reviewForm.comment.trim(),
+      };
+      const created = await EventService.createEventReview(eventId, payload);
+      setReviews((prev) => [created.data, ...prev]);
+      setReviewMeta((prev) => {
+        const nextTotal = (prev.total || 0) + 1;
+        const currentTotalScore = (prev.average_rating || 0) * (prev.total || 0);
+        const nextAverage = Number(
+          ((currentTotalScore + payload.rating) / nextTotal).toFixed(1),
+        );
+        return { ...prev, total: nextTotal, average_rating: nextAverage };
+      });
+      setReviewForm({ rating: 5, comment: "" });
+      setReviewMessage("Review submitted successfully.");
+    } catch (err) {
+      console.error(err);
+      setReviewMessage(
+        err.response?.data?.message || "Could not submit review. Please try again.",
+      );
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
 
   return (
     <main className="event-detail-page">
@@ -167,6 +245,85 @@ const EventDetailPage = () => {
               )}
             </aside>
           </div>
+
+          <section className="detail-panel detail-reviews">
+            <div className="detail-reviews-header">
+              <h2>Reviews</h2>
+              <p>
+                {reviewMeta.total || 0} review(s) — Average:{" "}
+                {reviewMeta.average_rating || 0}/5
+              </p>
+            </div>
+
+            {canLeaveReview && (
+              <form className="review-form" onSubmit={handleSubmitReview}>
+                <h3>Share your experience</h3>
+                <label htmlFor="rating">Rating</label>
+                <select
+                  id="rating"
+                  value={reviewForm.rating}
+                  onChange={(e) =>
+                    handleReviewInputChange("rating", Number(e.target.value))
+                  }
+                  disabled={submittingReview}
+                >
+                  <option value={5}>5 — Excellent</option>
+                  <option value={4}>4 — Good</option>
+                  <option value={3}>3 — Average</option>
+                  <option value={2}>2 — Poor</option>
+                  <option value={1}>1 — Bad</option>
+                </select>
+
+                <label htmlFor="comment">Comment</label>
+                <textarea
+                  id="comment"
+                  maxLength={300}
+                  value={reviewForm.comment}
+                  onChange={(e) =>
+                    handleReviewInputChange("comment", e.target.value)
+                  }
+                  disabled={submittingReview}
+                  placeholder="Write your review..."
+                />
+
+                <button type="submit" disabled={submittingReview}>
+                  {submittingReview ? "Submitting..." : "Submit Review"}
+                </button>
+                {reviewMessage && (
+                  <p className="review-message">{reviewMessage}</p>
+                )}
+              </form>
+            )}
+
+            {!isEventEnded && (
+              <p className="review-note">Reviews open after the event ends.</p>
+            )}
+
+            {reviewLoading ? (
+              <p className="review-note">Loading reviews...</p>
+            ) : reviewError ? (
+              <p className="review-note review-error">{reviewError}</p>
+            ) : reviews.length === 0 ? (
+              <p className="review-note">
+                No reviews yet. Be the first one after attending this event.
+              </p>
+            ) : (
+              <div className="review-list">
+                {reviews.map((review) => (
+                  <article key={review.id} className="review-item">
+                    <div className="review-item-head">
+                      <strong>{review.attendee?.name || "Attendee"}</strong>
+                      <span>
+                        {"★".repeat(review.rating)}
+                        {"☆".repeat(5 - review.rating)}
+                      </span>
+                    </div>
+                    <p>{review.comment}</p>
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
         </section>
       )}
     </main>

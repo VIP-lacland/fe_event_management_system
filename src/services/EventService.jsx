@@ -68,7 +68,17 @@ export const EventService = {
       autoPromoted: response.data.auto_promoted, // true nếu có người được promote
     };
   },
-  
+
+  getEventReviews: async (eventId) => {
+    const response = await api.get(`/events/${eventId}/reviews`);
+    return response.data;
+  },
+
+  createEventReview: async (eventId, payload) => {
+    const response = await api.post(`/events/${eventId}/reviews`, payload);
+    return response.data;
+  },
+
   getRegistrations: async (eventId) => {
     const response = await api.get(
       `/organizer/events/${eventId}/registrations`,
