@@ -9,40 +9,56 @@ const categoryData = [
   { key: "All", label: "ALL", image: "/images/banner.png" },
   { key: "Music", label: "MUSIC", image: "/images/music.png" },
   { key: "Sports", label: "SPORTS", image: "/images/sports.png" },
-  {
-    key: "Food & Drink",
-    label: "FOOD & DRINK",
-    image: "/images/food-drink.png",
-  },
+  { key: "Food & Drink", label: "FOOD & DRINK", image: "/images/food-drink.png" },
   { key: "Arts", label: "ARTS", image: "/images/arts.png" },
   { key: "Education", label: "EDUCATION", image: "/images/education.png" },
   { key: "Community", label: "COMMUNITY", image: "/images/community.png" },
 ];
 
 const categoryImages = {
-  Music:
-    "linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(236, 72, 153, 0.36)), url('/images/music.png')",
-  Sports:
-    "linear-gradient(135deg, rgba(14, 165, 233, 0.16), rgba(6, 182, 212, 0.34)), url('/images/sports.png')",
-  "Food & Drink":
-    "linear-gradient(135deg, rgba(249, 115, 22, 0.16), rgba(251, 146, 60, 0.34)), url('/images/food-drink.png')",
+  Music: "linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(236, 72, 153, 0.36)), url('/images/music.png')",
+  Sports: "linear-gradient(135deg, rgba(14, 165, 233, 0.16), rgba(6, 182, 212, 0.34)), url('/images/sports.png')",
+  "Food & Drink": "linear-gradient(135deg, rgba(249, 115, 22, 0.16), rgba(251, 146, 60, 0.34)), url('/images/food-drink.png')",
   Arts: "linear-gradient(135deg, rgba(250, 204, 21, 0.16), rgba(234, 179, 8, 0.34)), url('/images/arts.png')",
-  Education:
-    "linear-gradient(135deg, rgba(20, 184, 166, 0.16), rgba(15, 118, 110, 0.34)), url('/images/education.png')",
-  Community:
-    "linear-gradient(135deg, rgba(194, 65, 12, 0.16), rgba(234, 88, 12, 0.34)), url('/images/community.png')",
+  Education: "linear-gradient(135deg, rgba(20, 184, 166, 0.16), rgba(15, 118, 110, 0.34)), url('/images/education.png')",
+  Community: "linear-gradient(135deg, rgba(194, 65, 12, 0.16), rgba(234, 88, 12, 0.34)), url('/images/community.png')",
 };
 
 const EVENTS_PER_PAGE = 6;
 
-const normalizeCity = (city) =>
-  city
+// Hàm chuẩn hóa string: Bỏ dấu, viết thường, xử lý "đ" → "d", loại bỏ tiền tố TP/Thành phố
+const normalizeString = (str) => {
+  if (!str) return "";
+  return str
     .toLowerCase()
-    .replace(/tp\.?\s*|thành phố\s*/gi, "")
-    .replace(/[–—]/g, "-")
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
+    .replace(/tp\.\s*|thành phố\s*|thanh pho\s*/gi, "")
+    .replace(/đ/g, "d")                      // Xử lý chữ "đ" đặc biệt
+    .normalize("NFD")                        // Tách dấu khỏi ký tự gốc
+    .replace(/[\u0300-\u036f]/g, "")         // Xóa dấu tiếng Việt
     .trim();
+};
+
+// Hàm check city - ĐƠN GIẢN HƠN, HOẠT ĐỘNG CHẮC CHẮN
+const matchesCityFilter = (location, selectedCity) => {
+  if (!selectedCity || selectedCity === "" || selectedCity === "All cities") return true;
+  if (!location) return false;
+  
+  // Convert cả 2 về lowercase và bỏ dấu HOÀN TOÀN
+  const loc = location.toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/thành phố|thanh pho|tp\.\s*/gi, "")
+    .trim();
+    
+  const city = selectedCity.toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/thành phố|thanh pho|tp\.\s*/gi, "")
+    .trim();
+  
+  // Check nếu city nằm trong location
+  const result = loc.includes(city);
+  console.log(`🔍 "${location}" includes "${selectedCity}"? → ${result}`);
+  return result;
+};
 
 const AttendeeHomePage = () => {
   const [events, setEvents] = useState([]);
@@ -50,6 +66,7 @@ const AttendeeHomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [selectedCity, setSelectedCity] = useState("");
+  const [filterDate, setFilterDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -58,7 +75,6 @@ const AttendeeHomePage = () => {
     const loadEvents = async () => {
       setLoading(true);
       setError("");
-
       try {
         const { data } = await EventService.fetchEvents();
         setEvents(data || []);
@@ -69,48 +85,42 @@ const AttendeeHomePage = () => {
         setLoading(false);
       }
     };
-
     loadEvents();
   }, []);
 
   const filteredEvents = useMemo(() => {
-    const normalizedCity = normalizeCity(selectedCity);
-
     return events.filter((event) => {
-      const eventText = [event.title, event.location, event.description]
-        .join(" ")
-        .toLowerCase();
+      // 1. Search filter
+      const eventText = [event.title, event.location, event.description].join(" ").toLowerCase();
+      const matchesSearch = searchQuery ? eventText.includes(searchQuery.toLowerCase()) : true;
 
-      const matchesSearch = searchQuery
-        ? eventText.includes(searchQuery.toLowerCase())
-        : true;
+      // 2. Category filter
+      const matchesCategory = selectedCategory === "All" || event.category === selectedCategory;
 
-      const matchesCategory =
-        selectedCategory === "All" || event.category === selectedCategory;
-
+      // 3. Time filter (Today/Weekend)
       const eventDate = new Date(event.event_date);
       const today = new Date();
       const isToday = eventDate.toDateString() === today.toDateString();
       const isWeekend = [6, 0].includes(eventDate.getDay());
-
       const matchesFilter =
         selectedFilter === "All" ||
-        (selectedFilter === "For you" && true) ||
+        (selectedFilter === "For you") ||
         (selectedFilter === "Today" && isToday) ||
         (selectedFilter === "This weekend" && isWeekend);
 
-      const matchesCity = normalizedCity
-        ? event.location.toLowerCase().includes(normalizedCity)
+      // 4. City filter (đã chuẩn hóa)
+      const matchesCity = matchesCityFilter(event.location, selectedCity);
+
+      // 5. Date filter (YYYY-MM-DD)
+      const matchesDate = filterDate
+        ? new Date(event.event_date).toISOString().split("T")[0] === filterDate
         : true;
 
-      return matchesSearch && matchesCategory && matchesFilter && matchesCity;
+      return matchesSearch && matchesCategory && matchesFilter && matchesCity && matchesDate;
     });
-  }, [events, searchQuery, selectedCategory, selectedFilter, selectedCity]);
+  }, [events, searchQuery, selectedCategory, selectedFilter, selectedCity, filterDate]);
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredEvents.length / EVENTS_PER_PAGE),
-  );
+  const totalPages = Math.max(1, Math.ceil(filteredEvents.length / EVENTS_PER_PAGE));
   const visiblePage = Math.min(currentPage, totalPages);
 
   const paginatedEvents = useMemo(() => {
@@ -128,23 +138,14 @@ const AttendeeHomePage = () => {
       <Header />
 
       <section className="homepage-hero">
-        <img
-          className="hero-banner-image"
-          src="/images/banner.png"
-          alt="A Night for Every Star - Year End Party 2025"
-        />
+        <img className="hero-banner-image" src="/images/banner.png" alt="Featured Event" />
         <div className="hero-shade" />
         <div className="hero-info">
           <span className="hero-kicker">Featured Event</span>
           <h1>A Night for Every Star</h1>
-          <p>
-            Đêm Year End Party 2026 tại Đà Nẵng với âm nhạc, ánh sáng và không
-            gian kết nối dành cho cộng đồng.
-          </p>
+          <p>Đêm Year End Party 2026 tại Đà Nẵng với âm nhạc, ánh sáng và không gian kết nối dành cho cộng đồng.</p>
           <div className="hero-actions">
-            <a href="#events" className="hero-primary-action">
-              View Events
-            </a>
+            <a href="#events" className="hero-primary-action">View Events</a>
             <div className="hero-meta">
               <span>23.01.2026</span>
               <span>Đà Nẵng Convention Center</span>
@@ -159,10 +160,7 @@ const AttendeeHomePage = () => {
             key={category.key}
             type="button"
             className={`category-card ${selectedCategory === category.key ? "active" : ""}`}
-            onClick={() => {
-              setSelectedCategory(category.key);
-              setCurrentPage(1);
-            }}
+            onClick={() => { setSelectedCategory(category.key); setCurrentPage(1); }}
           >
             <div className="category-icon">
               <img src={category.image} alt={`${category.label} icon`} />
@@ -188,6 +186,8 @@ const AttendeeHomePage = () => {
         totalPages={totalPages}
         eventsPerPage={EVENTS_PER_PAGE}
         onPageChange={setCurrentPage}
+        filterDate={filterDate}
+        onDateChange={(date) => { setFilterDate(date); setCurrentPage(1); }}
       />
 
       <Footer />
