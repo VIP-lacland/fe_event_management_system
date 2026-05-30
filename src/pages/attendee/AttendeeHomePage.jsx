@@ -43,21 +43,10 @@ const matchesCityFilter = (location, selectedCity) => {
   if (!selectedCity || selectedCity === "" || selectedCity === "All cities") return true;
   if (!location) return false;
   
-  // Convert cả 2 về lowercase và bỏ dấu HOÀN TOÀN
-  const loc = location.toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/thành phố|thanh pho|tp\.\s*/gi, "")
-    .trim();
-    
-  const city = selectedCity.toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/thành phố|thanh pho|tp\.\s*/gi, "")
-    .trim();
+  const normalizedLocation = normalizeString(location);
+  const normalizedSelected = normalizeString(selectedCity);
   
-  // Check nếu city nằm trong location
-  const result = loc.includes(city);
-  console.log(`🔍 "${location}" includes "${selectedCity}"? → ${result}`);
-  return result;
+  return normalizedLocation.includes(normalizedSelected);
 };
 
 const AttendeeHomePage = () => {
