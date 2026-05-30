@@ -1,8 +1,7 @@
-/* Chỉnh ô lịch giống nút Filter */
 .date-filter-input {
   padding: 10px 16px;
   border: 1px solid #d1d5db;
-  border-radius: 9999px; /* Bo tròn hoàn toàn */
+  border-radius: 9999px;
   font-size: 14px;
   font-weight: 500;
   background: white;
@@ -17,10 +16,9 @@
   background: #f9fafb;
 }
 
-/* Căn chỉnh ô lịch nằm cùng hàng với các nút */
 .filter-line {
   display: flex;
-  gap: 10px; /* Khoảng cách giữa các nút */
+  gap: 10px; 
   flex-wrap: wrap;
   align-items: center;
   margin-top: 10px;
